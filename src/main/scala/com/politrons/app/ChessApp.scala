@@ -1,22 +1,76 @@
 package com.politrons.app
 
+import com.politrons.app.ChessApp.{Piece, Player}
+import com.politrons.app.ChessApp.Player.*
 import com.whitehatgaming.*
 
 import scala.io.Source
 
 object ChessApp {
 
-
-  //  val horizontal = ('A' to 'H')
-  //  val vertical = (1 to 8)
-
-
-  //  case class Position(piece:Option[Piece])
-
   case class Piece(name: String)
 
-  var myArray = Array.ofDim[Piece](8, 8)
+  case class Movement(val player: Player,
+                      val columFrom: Int,
+                      val rowFrom: Int,
+                      val columTo: Int,
+                      val rowTo: Int)
 
+  enum Player() {
+    case Player1 extends Player
+    case Player2 extends Player
+  }
+
+  def main(args: Array[String]): Unit = {
+
+    val path = getClass.getResource("/sample-moves.txt").getPath
+    val inputFile = new UserInputFile(path)
+
+    def getAllMovements(player: Player, movements: List[Movement]): List[Movement] = {
+      val move: Array[Int] = inputFile.nextMove()
+      if (move != null) {
+        require(move.size == 4, "Error loading movement, a mnove must include 4 elements")
+        player match {
+          case Player1 => getAllMovements(Player2, Movement(Player1, move(0), move(1), move(2), move(3)) +: movements)
+          case Player2 => getAllMovements(Player1, Movement(Player2, move(0), move(1), move(2), move(3)) +: movements)
+        }
+      } else {
+        movements
+      }
+    }
+
+
+    val movements = getAllMovements(Player1, List())
+
+    movements.foreach(movement => {
+      val maybePieceFrom = board(movement.rowFrom)(movement.columFrom)
+      board(movement.rowTo)(movement.columTo) = maybePieceFrom
+      board(movement.rowFrom)(movement.columFrom) = None
+    })
+    printBoard()
+  }
+
+
+  /**
+   * Prints current board state to the console in the ASCII mnemonic format
+   */
+  def printBoard(): Unit = {
+    val filesRow = """     A       B        C        D        E        F        G        H       """
+    val separator = """+-------+--------+--------+--------+--------+--------+--------+--------+  """
+    println(filesRow)
+    println(separator)
+
+    board.foreach(colums => {
+      colums.foreach(maybePos => {
+        print(maybePos.getOrElse(Piece("        ")).name)
+        print("|")
+      })
+      println("\n")
+    })
+
+    println(separator)
+    println(filesRow)
+  }
 
   val board = Array.tabulate[Option[Piece]](8, 8) { (i, j) =>
     (i, j) match {
@@ -39,16 +93,6 @@ object ChessApp {
       case (1, 5) => Some(Piece("  Pawn  "))
       case (1, 6) => Some(Piece("  Pawn  "))
       case (1, 7) => Some(Piece("  Pawn  "))
-
-      //First row
-      case (0, 0) => Some(Piece("  Rook  "))
-      case (0, 1) => Some(Piece(" Knight "))
-      case (0, 2) => Some(Piece(" Bishop "))
-      case (0, 3) => Some(Piece("  King  "))
-      case (0, 4) => Some(Piece("  Queen "))
-      case (0, 5) => Some(Piece(" Bishop "))
-      case (0, 6) => Some(Piece(" Knight "))
-      case (0, 7) => Some(Piece("  Rook  "))
 
       //Seventh row
       case (6, 0) => Some(Piece("  pawn  "))
@@ -75,60 +119,4 @@ object ChessApp {
 
   }
 
-
-  case class Movement(val columFrom: Int,
-                      val rowFrom: Int,
-                      val columTo: Int,
-                      val rowTo: Int)
-
-  def main(args: Array[String]): Unit = {
-    val path = getClass.getResource("/sample-moves.txt").getPath
-    val inputFile = new UserInputFile(path)
-
-    def getAllMovements(movements: List[Movement]): List[Movement] = {
-      val move: Array[Int] = inputFile.nextMove()
-      if (move != null) {
-        require(move.size == 4, "Error loading movement, a mnove must include 4 elements")
-        getAllMovements(Movement(move(0), move(1), move(2), move(3)) +: movements)
-      } else {
-        movements
-      }
-    }
-
-    val value = getAllMovements(List())
-    println(value)
-
-    printBoard()
-  }
-
-
-  /**
-   * Prints current board state to the console in the ASCII mnemonic format
-   */
-  def printBoard(): Unit = {
-    val filesRow = """     A       B        C        D        E        F        G        H       """
-    val separator = """+-------+--------+--------+--------+--------+--------+--------+--------+  """
-    println(filesRow)
-    println(separator)
-
-    board.foreach(colums => {
-      colums.foreach(maybePos => {
-        print(maybePos.getOrElse(Piece("        ")).name)
-        print("|")
-      })
-      println("\n")
-    })
-
-    println(separator)
-    println(filesRow)
-  }
-
 }
-
-
-
-
-//0 : The column position to move from (0 indexed)
-//1 : The row position to move from (0 indexed)
-//2 : The column position to move to (0 indexed)
-//3 : The row position to move to (0 indexed)
