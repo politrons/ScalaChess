@@ -18,6 +18,7 @@ case class ChessEngine() {
       case "knight" => knightRule(movement)
       case "king" => kingRule(movement)
       case "bishop" => bishopRule(movement)
+      case "queen" => queenRule(movement)
       case _ => false
     }
   }
@@ -62,8 +63,11 @@ case class ChessEngine() {
   private def bishopRule(movement: Movement): Boolean = {
     val horizontal = Math.abs(movement.rowFrom - movement.rowTo)
     val vertical = Math.abs(movement.columnFrom - movement.columnTo)
-    horizontal == vertical
+    (horizontal > 0 && vertical > 0) && (horizontal == vertical)
   }
 
+  private def queenRule(movement: Movement): Boolean = {
+    bishopRule(movement) || rookRule(movement)
+  }
 
 }
