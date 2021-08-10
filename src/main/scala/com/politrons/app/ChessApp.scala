@@ -20,13 +20,13 @@ object ChessApp {
     val inputFile = new UserInputFile(path)
 
     @tailrec
-    def getAllMovements(player: Player, movements: List[Movement]): List[Movement] = {
+    def getAllMovements(player: Player, moveNumber: Int, movements: List[Movement]): List[Movement] = {
       val move: Array[Int] = inputFile.nextMove()
       if (move != null) {
         require(move.length == 4, "Error loading movement, a move must include 4 elements")
         player match {
-          case Player1() => getAllMovements(Player2(), Movement(Player1(), move(0), move(1), move(2), move(3)) +: movements)
-          case Player2() => getAllMovements(Player1(), Movement(Player2(), move(0), move(1), move(2), move(3)) +: movements)
+          case Player1() => getAllMovements(Player2(), moveNumber + 1, Movement(Player1(), moveNumber, ColumnFrom(move(0)), RowFrom(move(1)), ColumnTo(move(2)), RowTo(move(3))) +: movements)
+          case Player2() => getAllMovements(Player1(), moveNumber + 1, Movement(Player2(), moveNumber, ColumnFrom(move(0)), RowFrom(move(1)), ColumnTo(move(2)), RowTo(move(3))) +: movements)
         }
       } else {
         movements
@@ -34,12 +34,12 @@ object ChessApp {
     }
 
 
-    val movements = getAllMovements(Player1(), List())
+    val movements = getAllMovements(Player1(), 1, List())
 
     movements.foreach(movement => {
-      val maybePieceFrom = board(movement.rowFrom)(movement.columnFrom)
-      board(movement.rowTo)(movement.columnTo) = maybePieceFrom
-      board(movement.rowFrom)(movement.columnFrom) = None
+      val maybePieceFrom = board(movement.rowFrom.value)(movement.columnFrom.value)
+      board(movement.rowTo.value)(movement.columnTo.value) = maybePieceFrom
+      board(movement.rowFrom.value)(movement.columnFrom.value) = None
     })
     chessView.printBoard(board)
   }

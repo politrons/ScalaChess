@@ -24,7 +24,8 @@ case class ChessEngine() {
   }
 
   private def isValidNextMove(movement: Movement) = {
-    (movement.columnTo >= 0 || movement.columnTo <= 7) || (movement.rowTo >= 0 || movement.rowTo <= 7)
+    (movement.columnTo.value >= 0 || movement.columnTo.value <= 7) ||
+      (movement.rowTo.value >= 0 || movement.rowTo.value <= 7)
   }
 
   /**
@@ -33,27 +34,25 @@ case class ChessEngine() {
    * ------------
    */
   private def rookRule(movement: Movement): Boolean = {
-    (movement.rowFrom > movement.rowTo &&
-      movement.columnFrom == movement.columnTo) ||
-      (movement.rowFrom < movement.rowTo &&
-        movement.columnFrom == movement.columnTo) ||
-      (movement.rowFrom == movement.rowTo &&
-        movement.columnFrom > movement.columnTo) ||
-      (movement.rowFrom == movement.rowTo &&
-        movement.columnFrom < movement.columnTo)
+    (movement.rowFrom.value > movement.rowTo.value &&
+      movement.columnFrom.value == movement.columnTo.value) ||
+      (movement.rowFrom.value < movement.rowTo.value &&
+        movement.columnFrom.value == movement.columnTo.value) ||
+      (movement.rowFrom.value == movement.rowTo.value &&
+        movement.columnFrom.value > movement.columnTo.value) ||
+      (movement.rowFrom.value == movement.rowTo.value &&
+        movement.columnFrom.value < movement.columnTo.value)
   }
 
   private def knightRule(movement: Movement): Boolean = {
-    val horizontal = Math.abs(movement.rowFrom - movement.rowTo)
-    val vertical = Math.abs(movement.columnFrom - movement.columnTo)
+    val (horizontal: Int, vertical: Int) = diffMovements(movement)
 
     (horizontal == 2 && vertical == 1) ||
       (horizontal == 1 && vertical == 2)
   }
 
   private def kingRule(movement: Movement): Boolean = {
-    val horizontal = Math.abs(movement.rowFrom - movement.rowTo)
-    val vertical = Math.abs(movement.columnFrom - movement.columnTo)
+    val (horizontal: Int, vertical: Int) = diffMovements(movement)
     (horizontal <= 1 && vertical <= 1) &&
       ((horizontal == 1 || vertical == 1) ||
         (horizontal == 0 || vertical == 1) ||
@@ -61,13 +60,26 @@ case class ChessEngine() {
   }
 
   private def bishopRule(movement: Movement): Boolean = {
-    val horizontal = Math.abs(movement.rowFrom - movement.rowTo)
-    val vertical = Math.abs(movement.columnFrom - movement.columnTo)
+    val (horizontal: Int, vertical: Int) = diffMovements(movement)
     (horizontal > 0 && vertical > 0) && (horizontal == vertical)
   }
 
   private def queenRule(movement: Movement): Boolean = {
     bishopRule(movement) || rookRule(movement)
   }
+
+  private def pawnRule(movement: Movement): Boolean = {
+    val (horizontal: Int, vertical: Int) = diffMovements(movement)
+    (horizontal > 0 && vertical > 0) && (horizontal == vertical)
+  }
+
+
+  private def diffMovements(movement: Movement): (Int, Int) = {
+    val horizontal = Math.abs(movement.rowFrom.value - movement.rowTo.value)
+    val vertical = Math.abs(movement.columnFrom.value - movement.columnTo.value)
+    (horizontal, vertical)
+  }
+
+
 
 }

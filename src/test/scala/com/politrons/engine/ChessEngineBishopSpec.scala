@@ -1,6 +1,6 @@
 package com.politrons.engine
 
-import com.politrons.model.ChessDomain.{Movement, Piece, Player1}
+import com.politrons.model.ChessDomain.{ColumnFrom, ColumnTo, Movement, Piece, Player1, RowFrom, RowTo}
 import org.scalatest.{BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
 
 class ChessEngineBishopSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfterAll {
@@ -11,7 +11,7 @@ class ChessEngineBishopSpec extends FeatureSpec with GivenWhenThen with BeforeAn
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Bishop")
-      val result = engine.isValidMove(Piece("Bishop"), Movement(Player1(), 1, 1, 2, 2))
+      val result = engine.isValidMove(Piece("Bishop"), Movement(Player1(),1, ColumnFrom(1), RowFrom(1), ColumnTo(2), RowTo(2)))
       Then("The movement is ok")
       assert(result)
     }
@@ -20,7 +20,7 @@ class ChessEngineBishopSpec extends FeatureSpec with GivenWhenThen with BeforeAn
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Bishop")
-      val result = engine.isValidMove(Piece("Bishop"), Movement(Player1(), 1, 1, 5, 5))
+      val result = engine.isValidMove(Piece("Bishop"), Movement(Player1(),1, ColumnFrom(1), RowFrom(1), ColumnTo(5), RowTo(5)))
       Then("The movement is ok")
       assert(result)
     }
@@ -29,7 +29,7 @@ class ChessEngineBishopSpec extends FeatureSpec with GivenWhenThen with BeforeAn
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Bishop")
-      val result = engine.isValidMove(Piece("Bishop"), Movement(Player1(), 5, 5, 1, 1))
+      val result = engine.isValidMove(Piece("Bishop"), Movement(Player1(),1, ColumnFrom(5), RowFrom(5), ColumnTo(1), RowTo(1)))
       Then("The movement is ok")
       assert(result)
     }
@@ -38,7 +38,7 @@ class ChessEngineBishopSpec extends FeatureSpec with GivenWhenThen with BeforeAn
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Bishop")
-      val result = engine.isValidMove(Piece("Bishop"), Movement(Player1(), 1, 1, 3, 4))
+      val result = engine.isValidMove(Piece("Bishop"), Movement(Player1(),1, ColumnFrom(1), RowFrom(1), ColumnTo(3), RowTo(4)))
       Then("The movement is wrong")
       assert(!result)
     }
@@ -47,7 +47,7 @@ class ChessEngineBishopSpec extends FeatureSpec with GivenWhenThen with BeforeAn
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Bishop")
-      val result = engine.isValidMove(Piece("Bishop"), Movement(Player1(), 5, 5, 3, 4))
+      val result = engine.isValidMove(Piece("Bishop"), Movement(Player1(),1, ColumnFrom(5), RowFrom(5), ColumnTo(3), RowTo(4)))
       Then("The movement is wrong")
       assert(!result)
     }
