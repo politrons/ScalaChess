@@ -19,6 +19,7 @@ case class ChessEngine() {
       case "king" => kingRule(movement)
       case "bishop" => bishopRule(movement)
       case "queen" => queenRule(movement)
+      case "pawn" => pawnRule(movement)
       case _ => false
     }
   }
@@ -69,17 +70,16 @@ case class ChessEngine() {
   }
 
   private def pawnRule(movement: Movement): Boolean = {
-    val (horizontal: Int, vertical: Int) = diffMovements(movement)
-    (horizontal > 0 && vertical > 0) && (horizontal == vertical)
+    val (vertical: Int, horizontal: Int) = diffMovements(movement)
+    (horizontal == 0 && vertical == 1) ||
+      (horizontal == 0 && vertical == 2) && (movement.number <= 2)
   }
-
 
   private def diffMovements(movement: Movement): (Int, Int) = {
-    val horizontal = Math.abs(movement.rowFrom.value - movement.rowTo.value)
-    val vertical = Math.abs(movement.columnFrom.value - movement.columnTo.value)
-    (horizontal, vertical)
+    val vertical = Math.abs(movement.rowFrom.value - movement.rowTo.value)
+    val horizontal = Math.abs(movement.columnFrom.value - movement.columnTo.value)
+    (vertical, horizontal)
   }
-
 
 
 }
