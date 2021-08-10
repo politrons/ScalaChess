@@ -6,8 +6,7 @@ import com.politrons.model.ChessDomain.{Piece, Movement}
  * Rule Engine Class responsible for all the Chess Pieces movement rules.
  */
 case class ChessEngine() {
-
-
+  
   def isValidMove(piece: Piece, movement: Movement): Boolean = {
     isValidNextMove(movement) && isValidPieceMove(piece, movement)
   }
