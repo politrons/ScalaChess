@@ -1,27 +1,21 @@
 package com.politrons.app
 
-import com.politrons.app.ChessApp.{Piece, Player}
-import com.politrons.app.ChessApp.Player.*
+import com.politrons.engine.ChessEngine
+import com.politrons.model.ChessDomain.Player.{Player1, Player2}
+import com.politrons.model.ChessDomain.{Movement, Piece, Player}
+import com.politrons.view.ChessView
 import com.whitehatgaming.*
 
 import scala.io.Source
 
 object ChessApp {
 
-  case class Piece(name: String)
-
-  case class Movement(val player: Player,
-                      val columFrom: Int,
-                      val rowFrom: Int,
-                      val columTo: Int,
-                      val rowTo: Int)
-
-  enum Player() {
-    case Player1 extends Player
-    case Player2 extends Player
-  }
 
   def main(args: Array[String]): Unit = {
+
+
+    val chessView = ChessView()
+    val chessEngine = ChessEngine()
 
     val path = getClass.getResource("/sample-moves.txt").getPath
     val inputFile = new UserInputFile(path)
@@ -47,32 +41,11 @@ object ChessApp {
       board(movement.rowTo)(movement.columTo) = maybePieceFrom
       board(movement.rowFrom)(movement.columFrom) = None
     })
-    printBoard()
+    chessView.printBoard(board)
   }
 
 
-  /**
-   * Prints current board state to the console in the ASCII mnemonic format
-   */
-  def printBoard(): Unit = {
-    val filesRow = """     A       B        C        D        E        F        G        H       """
-    val separator = """+-------+--------+--------+--------+--------+--------+--------+--------+  """
-    println(filesRow)
-    println(separator)
-
-    board.foreach(colums => {
-      colums.foreach(maybePos => {
-        print(maybePos.getOrElse(Piece("        ")).name)
-        print("|")
-      })
-      println("\n")
-    })
-
-    println(separator)
-    println(filesRow)
-  }
-
-  val board = Array.tabulate[Option[Piece]](8, 8) { (i, j) =>
+  val board: Array[Array[Option[Piece]]] = Array.tabulate[Option[Piece]](8, 8) { (i, j) =>
     (i, j) match {
       //First row
       case (0, 0) => Some(Piece("  Rook  "))
