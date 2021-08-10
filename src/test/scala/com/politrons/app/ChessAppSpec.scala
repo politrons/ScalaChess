@@ -6,7 +6,6 @@ import org.scalatest.{BeforeAndAfterAll, GivenWhenThen}
 
 class ChessAppSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterAll {
 
-
   test("Check that all pieces are on the board when we start a game") {
     Given("Chess board")
     val board = ChessApp.board
