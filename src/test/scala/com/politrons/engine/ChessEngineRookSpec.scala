@@ -11,7 +11,7 @@ class ChessEngineRookSpec extends FeatureSpec with GivenWhenThen with BeforeAndA
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Rook and horizontal movement")
-      val result = engine.isValidateMove(Piece("Rook"), Movement(Player1(), 1, 1, 5, 1))
+      val result = engine.isValidMove(Piece("Rook"), Movement(Player1(), 1, 1, 5, 1))
       Then("The movement is ok")
       assert(result)
     }
@@ -20,7 +20,7 @@ class ChessEngineRookSpec extends FeatureSpec with GivenWhenThen with BeforeAndA
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Rook and vertical movement")
-      val result = engine.isValidateMove(Piece("Rook"), Movement(Player1(), 1, 1, 1, 5))
+      val result = engine.isValidMove(Piece("Rook"), Movement(Player1(), 1, 1, 1, 5))
       Then("The movement is ok")
       assert(result)
     }
@@ -29,7 +29,7 @@ class ChessEngineRookSpec extends FeatureSpec with GivenWhenThen with BeforeAndA
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Rook and vertical and horizontal movement")
-      val result = engine.isValidateMove(Piece("Rook"), Movement(Player1(), 1, 1, 5, 5))
+      val result = engine.isValidMove(Piece("Rook"), Movement(Player1(), 1, 1, 5, 5))
       Then("The movement is wrong")
       assert(!result)
     }
@@ -38,7 +38,7 @@ class ChessEngineRookSpec extends FeatureSpec with GivenWhenThen with BeforeAndA
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Rook and vertical and horizontal movement")
-      val result = engine.isValidateMove(Piece("Rook"), Movement(Player1(), 1, 1, 1, 1))
+      val result = engine.isValidMove(Piece("Rook"), Movement(Player1(), 1, 1, 1, 1))
       Then("The movement is wrong")
       assert(!result)
     }

@@ -11,7 +11,7 @@ class ChessEngineKnightSpec extends FeatureSpec with GivenWhenThen with BeforeAn
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Knight")
-      val result = engine.isValidateMove(Piece("Knight"), Movement(Player1(), 1, 1, 3, 2))
+      val result = engine.isValidMove(Piece("Knight"), Movement(Player1(), 1, 1, 3, 2))
       Then("The movement is ok")
       assert(result)
     }
@@ -20,7 +20,7 @@ class ChessEngineKnightSpec extends FeatureSpec with GivenWhenThen with BeforeAn
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Knight")
-      val result = engine.isValidateMove(Piece("Knight"), Movement(Player1(), 1, 1, 2, 3))
+      val result = engine.isValidMove(Piece("Knight"), Movement(Player1(), 1, 1, 2, 3))
       Then("The movement is ok")
       assert(result)
     }
@@ -29,7 +29,7 @@ class ChessEngineKnightSpec extends FeatureSpec with GivenWhenThen with BeforeAn
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Knight")
-      val result = engine.isValidateMove(Piece("Knight"), Movement(Player1(), 5, 5, 3, 4))
+      val result = engine.isValidMove(Piece("Knight"), Movement(Player1(), 5, 5, 3, 4))
       Then("The movement is ok")
       assert(result)
     }
@@ -38,7 +38,7 @@ class ChessEngineKnightSpec extends FeatureSpec with GivenWhenThen with BeforeAn
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Knight")
-      val result = engine.isValidateMove(Piece("Knight"), Movement(Player1(), 1, 1, 3, 6))
+      val result = engine.isValidMove(Piece("Knight"), Movement(Player1(), 1, 1, 3, 6))
       Then("The movement is wrong")
       assert(!result)
     }
@@ -47,7 +47,7 @@ class ChessEngineKnightSpec extends FeatureSpec with GivenWhenThen with BeforeAn
       Given("Chess engine instance")
       val engine = ChessEngine()
       When("I invoke isValidateMove for Knight")
-      val result = engine.isValidateMove(Piece("Knight"), Movement(Player1(), 1, 1, 3, 1))
+      val result = engine.isValidMove(Piece("Knight"), Movement(Player1(), 1, 1, 3, 1))
       Then("The movement is wrong")
       assert(!result)
     }
