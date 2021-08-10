@@ -1,12 +1,11 @@
 package com.politrons.app
 
 import com.politrons.engine.ChessEngine
-import com.politrons.model.ChessDomain.Player.{Player1, Player2}
-import com.politrons.model.ChessDomain.{Movement, Piece, Player}
+import com.politrons.model.ChessDomain._
 import com.politrons.view.ChessView
-import com.whitehatgaming.*
+import com.whitehatgaming.UserInputFile
 
-import scala.io.Source
+import scala.annotation.tailrec
 
 object ChessApp {
 
@@ -20,13 +19,14 @@ object ChessApp {
     val path = getClass.getResource("/sample-moves.txt").getPath
     val inputFile = new UserInputFile(path)
 
+    @tailrec
     def getAllMovements(player: Player, movements: List[Movement]): List[Movement] = {
       val move: Array[Int] = inputFile.nextMove()
       if (move != null) {
-        require(move.size == 4, "Error loading movement, a mnove must include 4 elements")
+        require(move.length == 4, "Error loading movement, a move must include 4 elements")
         player match {
-          case Player1 => getAllMovements(Player2, Movement(Player1, move(0), move(1), move(2), move(3)) +: movements)
-          case Player2 => getAllMovements(Player1, Movement(Player2, move(0), move(1), move(2), move(3)) +: movements)
+          case Player1() => getAllMovements(Player2(), Movement(Player1(), move(0), move(1), move(2), move(3)) +: movements)
+          case Player2() => getAllMovements(Player1(), Movement(Player2(), move(0), move(1), move(2), move(3)) +: movements)
         }
       } else {
         movements
@@ -34,12 +34,12 @@ object ChessApp {
     }
 
 
-    val movements = getAllMovements(Player1, List())
+    val movements = getAllMovements(Player1(), List())
 
     movements.foreach(movement => {
-      val maybePieceFrom = board(movement.rowFrom)(movement.columFrom)
-      board(movement.rowTo)(movement.columTo) = maybePieceFrom
-      board(movement.rowFrom)(movement.columFrom) = None
+      val maybePieceFrom = board(movement.rowFrom)(movement.columnFrom)
+      board(movement.rowTo)(movement.columnTo) = maybePieceFrom
+      board(movement.rowFrom)(movement.columnFrom) = None
     })
     chessView.printBoard(board)
   }
