@@ -1,6 +1,6 @@
 package com.politrons.app
 
-import com.politrons.model.ChessDomain.*
+import com.politrons.model.ChessDomain._
 import com.politrons.view.ChessBoard
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.{BeforeAndAfterAll, GivenWhenThen}

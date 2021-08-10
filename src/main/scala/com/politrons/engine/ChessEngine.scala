@@ -1,24 +1,28 @@
 package com.politrons.engine
 
-import com.politrons.model.ChessDomain.{Piece, Movement}
+import com.politrons.model.ChessDomain.{Movement, Piece}
+import com.politrons.view.ChessBoard
 
 /**
  * Rule Engine Class responsible for all the Chess Pieces movement rules.
  */
-case class ChessEngine() {
-  
-  def isValidMove(piece: Piece, movement: Movement): Boolean = {
-    isValidNextMove(movement) && isValidPieceMove(piece, movement)
+case class ChessEngine(var chessBoard: ChessBoard) {
+
+  def isValidMove(piece: Piece,
+                  movement: Movement): Boolean = {
+    isValidNextMove(movement) &&
+      isValidPieceMove(piece, movement)
   }
 
-  private def isValidPieceMove(piece: Piece, movement: Movement) = {
+  private def isValidPieceMove(piece: Piece,
+                               movement: Movement) = {
     piece.name.toLowerCase.trim match {
       case "rook" => rookRule(movement)
       case "knight" => knightRule(movement)
       case "king" => kingRule(movement)
       case "bishop" => bishopRule(movement)
       case "queen" => queenRule(movement)
-      case "pawn" => pawnRule(movement)
+      case "pawn" => pawnRule(movement) && pawnPathRule(movement)
       case _ => false
     }
   }
@@ -29,9 +33,9 @@ case class ChessEngine() {
   }
 
   /**
-   * ------------
-   * PIECE RULES
-   * ------------
+   * ---------------------
+   * PIECE MOVEMENT RULES
+   * ---------------------
    */
   private def rookRule(movement: Movement): Boolean = {
     (movement.rowFrom.value > movement.rowTo.value &&
@@ -78,6 +82,21 @@ case class ChessEngine() {
     val vertical = Math.abs(movement.rowFrom.value - movement.rowTo.value)
     val horizontal = Math.abs(movement.columnFrom.value - movement.columnTo.value)
     (vertical, horizontal)
+  }
+
+  /**
+   * ----------------
+   * PIECE PATH RULES
+   * ----------------
+   */
+
+  /**
+   * Rule: There's no pieces during the path of the pawn until reach the spot.
+   */
+  private def pawnPathRule(movement: Movement): Boolean = {
+    (movement.rowFrom.value + 1 to movement.rowTo.value).count(row => {
+      chessBoard.board(row)(movement.columnTo.value).isDefined
+    }) == 0
   }
 
 

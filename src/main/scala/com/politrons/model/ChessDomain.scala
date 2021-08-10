@@ -13,15 +13,16 @@ object ChessDomain {
 
   case class RowTo(value: Int)
 
-  case class Movement(player: Player1 | Player2,
+  case class Movement(player: Player,
                       number: Int,
                       columnFrom: ColumnFrom,
                       rowFrom: RowFrom,
                       columnTo: ColumnTo,
                       rowTo: RowTo)
 
-  case class Player1()
+  trait Player 
+  case class Player1() extends Player
 
-  case class Player2()
+  case class Player2() extends Player
 
 }

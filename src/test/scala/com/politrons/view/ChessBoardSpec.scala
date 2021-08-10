@@ -1,7 +1,5 @@
 package com.politrons.view
 
-import com.politrons.model.ChessDomain.*
-import com.politrons.view.ChessBoard
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.{BeforeAndAfterAll, GivenWhenThen}
 

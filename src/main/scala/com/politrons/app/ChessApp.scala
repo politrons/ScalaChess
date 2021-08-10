@@ -1,7 +1,7 @@
 package com.politrons.app
 
 import com.politrons.engine.ChessEngine
-import com.politrons.model.ChessDomain.*
+import com.politrons.model.ChessDomain.{ColumnFrom, ColumnTo, Movement, Player, Player1, Player2, RowFrom, RowTo}
 import com.politrons.view.ChessBoard
 import com.whitehatgaming.UserInputFile
 
@@ -10,7 +10,7 @@ import scala.annotation.tailrec
 object ChessApp extends App {
 
   val chessView = ChessBoard()
-  val chessEngine = ChessEngine()
+  val chessEngine = ChessEngine(chessView)
 
   val path = getClass.getResource("/sample-moves.txt").getPath
   val inputFile = new UserInputFile(path)
@@ -24,7 +24,7 @@ object ChessApp extends App {
    * to move phisically the piece in the board.
    */
   @tailrec
-  def runAllMovements(player: Player1 | Player2, moveNumber: Int): Unit = {
+  def runAllMovements(player: Player, moveNumber: Int): Unit = {
     val move: Array[Int] = inputFile.nextMove()
     if (move != null) {
       require(move.length == 4, "Error loading movement, a move must include 4 elements")
