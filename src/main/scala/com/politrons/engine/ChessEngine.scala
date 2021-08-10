@@ -13,7 +13,7 @@ case class ChessEngine() {
   }
 
   private def isValidPieceMove(piece: Piece, movement: Movement) = {
-    piece.name.toLowerCase match {
+    piece.name.toLowerCase.trim match {
       case "rook" => rookRule(movement)
       case "knight" => knightRule(movement)
       case "king" => kingRule(movement)

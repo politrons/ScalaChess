@@ -9,9 +9,7 @@ import scala.annotation.tailrec
 
 object ChessApp {
 
-
   def main(args: Array[String]): Unit = {
-
 
     val chessView = ChessView()
     val chessEngine = ChessEngine()
@@ -20,28 +18,29 @@ object ChessApp {
     val inputFile = new UserInputFile(path)
 
     @tailrec
-    def getAllMovements(player: Player, moveNumber: Int, movements: List[Movement]): List[Movement] = {
+    def runAllMovements(player: Player1 | Player2, moveNumber: Int): Unit = {
       val move: Array[Int] = inputFile.nextMove()
       if (move != null) {
         require(move.length == 4, "Error loading movement, a move must include 4 elements")
-        player match {
-          case Player1() => getAllMovements(Player2(), moveNumber + 1, Movement(Player1(), moveNumber, ColumnFrom(move(0)), RowFrom(move(1)), ColumnTo(move(2)), RowTo(move(3))) +: movements)
-          case Player2() => getAllMovements(Player1(), moveNumber + 1, Movement(Player2(), moveNumber, ColumnFrom(move(0)), RowFrom(move(1)), ColumnTo(move(2)), RowTo(move(3))) +: movements)
+        val movement = Movement(player, moveNumber, ColumnFrom(move(0)), RowFrom(move(1)), ColumnTo(move(2)), RowTo(move(3)))
+        board(movement.rowFrom.value)(movement.columnFrom.value) match {
+          case maybePiece@Some(piece) =>
+            if (chessEngine.isValidMove(piece, movement)) {
+              board(movement.rowTo.value)(movement.columnTo.value) = maybePiece
+              board(movement.rowFrom.value)(movement.columnFrom.value) = None
+            }
+            chessView.printBoard(board)
+            Thread.sleep(4000)
+          case None => ???
         }
-      } else {
-        movements
+        player match {
+          case Player1() => runAllMovements(Player2(), moveNumber + 1)
+          case Player2() => runAllMovements(Player1(), moveNumber + 1)
+        }
       }
     }
 
-
-    val movements = getAllMovements(Player1(), 1, List())
-
-    movements.foreach(movement => {
-      val maybePieceFrom = board(movement.rowFrom.value)(movement.columnFrom.value)
-      board(movement.rowTo.value)(movement.columnTo.value) = maybePieceFrom
-      board(movement.rowFrom.value)(movement.columnFrom.value) = None
-    })
-    chessView.printBoard(board)
+    runAllMovements(Player1(), 1)
   }
 
 
