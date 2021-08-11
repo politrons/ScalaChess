@@ -1,6 +1,7 @@
 package com.politrons.engine.impl
 
 import com.politrons.engine.PieceEngine
+import com.politrons.engine.impl.PathRules.horizontalOrVerticalPathRule
 import com.politrons.model.ChessDomain.Movement
 import com.politrons.view.ChessBoard
 
@@ -14,15 +15,15 @@ case class RookEngine() extends PieceEngine {
   override def valid(movement: Movement): Try[Boolean] = {
     Try {
       isValidNextMove(movement) &&
-        rookMovementRule(movement) &&
-        rookPathRule(movement)
+        isValidMovementRule(movement) &&
+        isValidPathRule(movement)
     }
   }
 
   /**
    * Rule: Valid that the piece only can move horizontal or vertical.
    */
-  private def rookMovementRule(movement: Movement): Boolean = {
+  private def isValidMovementRule(movement: Movement): Boolean = {
     val (vertical: Int, horizontal) = diffMovements(movement)
     (vertical > 0 && horizontal == 0) ||
       (vertical == 0 && horizontal > 0)
@@ -32,17 +33,9 @@ case class RookEngine() extends PieceEngine {
    * Rule: There's no piece during the horizontal or vertical path of the rook
    * from the beginning to the end
    */
-  private def rookPathRule(movement: Movement): Boolean = {
+  private def isValidPathRule(movement: Movement): Boolean = {
     val (vertical: Int, _) = diffMovements(movement)
-    if (vertical > 0) {
-      (movement.rowFrom.value + 1 until movement.rowTo.value).count(row => {
-        ChessBoard.board(row)(movement.columnFrom.value).isDefined
-      }) == 0
-    } else {
-      (movement.columnFrom.value + 1 until movement.columnTo.value).count(column => {
-        ChessBoard.board(movement.rowFrom.value)(column).isDefined
-      }) == 0
-    }
+    horizontalOrVerticalPathRule(vertical, movement)
   }
 
 }

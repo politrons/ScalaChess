@@ -35,7 +35,7 @@ object ChessApp extends App {
             case Player2() => runPlayerMovement(Player1(), moveNumber + 1)
           }
         case Failure(t) =>
-          println(t.getMessage)
+          println(s"[Movement Error]: Player: $player Error:${t.getMessage}")
           runPlayerMovement(player, moveNumber + 1)
       }
     }

@@ -1,6 +1,7 @@
 package com.politrons.view
 
 import com.politrons.engine.impl.PawnEngine
+import com.politrons.model.ChessDomain.Player1
 import com.politrons.model.Piece
 import com.politrons.utils.BoardMock.boardMock
 import org.scalatest.funsuite.AnyFunSuite
@@ -29,7 +30,7 @@ class ChessBoardSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterA
     Given("Chess board")
     val board = ChessBoard.board
     When("I modify one of the pieces")
-    board(0)(0) = Some(Piece("pawn", PawnEngine()))
+    board(0)(0) = Some(Piece("pawn",Player1(), PawnEngine()))
     Then("The piece in the position is a new one")
     val maybeRookPiece = board(0)(0)
     assert(maybeRookPiece.isDefined)

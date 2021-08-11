@@ -1,6 +1,7 @@
 package com.politrons.engine.impl
 
 import com.politrons.engine.PieceEngine
+import com.politrons.engine.impl.PathRules.diagonalPathRule
 import com.politrons.model.ChessDomain.Movement
 import com.politrons.view.ChessBoard
 
@@ -33,9 +34,7 @@ case class BishopEngine() extends PieceEngine {
    * Rule: Check if all previous diagonals movements from start to end has any piece
    */
   private def bishopPathRule(movement: Movement): Boolean = {
-    (movement.rowFrom.value + 1 until movement.rowTo.value).count(i => {
-        ChessBoard.board(i)(i).isDefined
-    }) == 0
+    diagonalPathRule(movement)
   }
 
 }

@@ -1,6 +1,7 @@
 package com.politrons.engine.impl
 
 import com.politrons.engine.PieceEngine
+import com.politrons.engine.impl.PathRules.{diagonalPathRule, horizontalOrVerticalPathRule}
 import com.politrons.model.ChessDomain.Movement
 import com.politrons.view.ChessBoard
 
@@ -25,6 +26,15 @@ case class QueenEngine() extends PieceEngine {
     val (horizontal: Int, vertical: Int) = diffMovements(movement)
     ((horizontal > 0 && vertical > 0) && (horizontal == vertical)) ||
       ((vertical > 0 && horizontal == 0) || (vertical == 0 && horizontal > 0))
+  }
+
+  private def queenPathRule(movement: Movement): Boolean = {
+    val (vertical: Int, horizontal) = diffMovements(movement)
+    if (vertical == horizontal) {
+      diagonalPathRule(movement)
+    } else {
+      horizontalOrVerticalPathRule(vertical, movement)
+    }
   }
 
 }

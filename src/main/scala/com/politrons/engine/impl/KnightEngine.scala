@@ -23,7 +23,6 @@ case class KnightEngine() extends PieceEngine {
    */
   private def knightMovementRule(movement: Movement): Boolean = {
     val (horizontal: Int, vertical: Int) = diffMovements(movement)
-
     (horizontal == 2 && vertical == 1) ||
       (horizontal == 1 && vertical == 2)
   }
