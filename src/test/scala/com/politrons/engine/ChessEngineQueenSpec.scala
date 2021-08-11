@@ -1,17 +1,17 @@
 package com.politrons.engine
 
-import com.politrons.engine.impl.{PawnEngine, QueenEngine, RookEngine}
+import com.politrons.engine.impl.{QueenEngine, RookEngine}
 import com.politrons.model.ChessDomain._
 import com.politrons.model.Piece
-import com.politrons.utils.BoardMock.boardMock
+import com.politrons.utils.BoardMock
 import com.politrons.view.ChessBoard
 import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen}
+import org.scalatest.{BeforeAndAfterEach, GivenWhenThen}
 
 class ChessEngineQueenSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterEach {
 
   override def beforeEach(): Unit = {
-    ChessBoard.board = boardMock
+    ChessBoard.board = BoardMock.getBoardMock
   }
 
   test("Queen rule validation move horizontal succeed") {

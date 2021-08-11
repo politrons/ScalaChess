@@ -4,7 +4,9 @@ import com.politrons.engine.impl.{BishopEngine, KingEngine, KnightEngine, PawnEn
 import com.politrons.model.ChessDomain.{Player, Player1, Player2}
 import com.politrons.model.Piece
 
-
+/**
+ * Singleton instance with the board of the game where we track all the states of the game
+ */
 object ChessBoard {
 
   private val logo: String =
@@ -12,8 +14,8 @@ object ChessBoard {
       |闩ㄩセㄖ ⼕卄🝗丂丂
       |""".stripMargin
 
-  var player1Movements = 0
-  var player2Movements = 0
+  private var player1Movements = 0
+  private var player2Movements = 0
 
   /**
    * Prints current board state to the console in the ASCII mnemonic format
@@ -46,14 +48,6 @@ object ChessBoard {
     println(filesRow)
     println("########################################################################")
 
-  }
-
-
-  private def increasePlayerMovement(player: Player) = {
-    player match {
-      case Player1() => player1Movements += 1
-      case Player2() => player2Movements += 1
-    }
   }
 
   var board: Array[Array[Option[Piece]]] = {
@@ -104,4 +98,12 @@ object ChessBoard {
         }
     }
   }
+
+  private def increasePlayerMovement(player: Player): Unit = {
+    player match {
+      case Player1() => player1Movements += 1
+      case Player2() => player2Movements += 1
+    }
+  }
+
 }

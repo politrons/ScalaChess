@@ -3,14 +3,14 @@ package com.politrons.view
 import com.politrons.engine.impl.PawnEngine
 import com.politrons.model.ChessDomain.Player1
 import com.politrons.model.Piece
-import com.politrons.utils.BoardMock.boardMock
+import com.politrons.utils.BoardMock
 import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.{BeforeAndAfterAll, GivenWhenThen}
+import org.scalatest.{BeforeAndAfterEach, GivenWhenThen}
 
-class ChessBoardSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterAll {
+class ChessBoardSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterEach {
 
-  override def beforeAll(): Unit = {
-    ChessBoard.board = boardMock
+  override def beforeEach(): Unit = {
+    ChessBoard.board = BoardMock.getBoardMock
   }
 
   test("Check that all pieces are on the board when we start a game") {

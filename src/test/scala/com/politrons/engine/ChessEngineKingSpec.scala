@@ -3,7 +3,7 @@ package com.politrons.engine
 import com.politrons.engine.impl.KingEngine
 import com.politrons.model.ChessDomain._
 import com.politrons.model.Piece
-import com.politrons.utils.BoardMock.boardMock
+import com.politrons.utils.BoardMock
 import com.politrons.view.ChessBoard
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen}
@@ -11,7 +11,7 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen}
 class ChessEngineKingSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterEach {
 
   override def beforeEach(): Unit = {
-    ChessBoard.board = boardMock
+    ChessBoard.board = BoardMock.getBoardMock
   }
 
   test("King rule validation move horizontal 1 and vertical 1 succeed") {
@@ -28,7 +28,7 @@ class ChessEngineKingSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     Given("Chess engine instance")
     val piece = Piece("King",Player1(), KingEngine())
     When("I invoke isValidateMove for King")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(2), RowTo(1)))
+    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(2), RowFrom(2), ColumnTo(3), RowTo(2)))
     Then("The movement is ok")
     assert(result.isSuccess)
     assert(result.get)
@@ -70,6 +70,20 @@ class ChessEngineKingSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     When("I invoke isValidateMove for King")
     val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(3), RowTo(1)))
     Then("The movement is wrong")
+    assert(result.isSuccess)
+    assert(!result.get)
+  }
+
+  /**
+   * PATH RULES
+   * ----------
+   */
+  test("King rule validation path one piece in the path") {
+    Given("Chess engine instance")
+    val piece = Piece("King",Player1(), KingEngine())
+    When("I invoke isValidateMove for King")
+    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(2), RowTo(1)))
+    Then("The movement is ok")
     assert(result.isSuccess)
     assert(!result.get)
   }

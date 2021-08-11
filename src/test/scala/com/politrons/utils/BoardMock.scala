@@ -6,7 +6,7 @@ import com.politrons.model.Piece
 
 object BoardMock {
 
-  var boardMock: Array[Array[Option[Piece]]] = {
+  def getBoardMock: Array[Array[Option[Piece]]] = {
     Array.tabulate[Option[Piece]](8, 8) {
       (i, j) =>
         (i, j) match {
