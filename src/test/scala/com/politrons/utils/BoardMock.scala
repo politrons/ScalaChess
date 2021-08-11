@@ -1,38 +1,11 @@
-package com.politrons.view
+package com.politrons.utils
 
 import com.politrons.engine.impl.{BishopEngine, KingEngine, KnightEngine, PawnEngine, QueenEngine, RookEngine}
 import com.politrons.model.Piece
 
+object BoardMock {
 
-object ChessBoard {
-
-  /**
-   * Prints current board state to the console in the ASCII mnemonic format
-   */
-  def printBoard(): Unit = {
-    val filesRow = """     A       B        C        D        E        F        G        H       """
-    val separator = """+-------+--------+--------+--------+--------+--------+--------+--------+  """
-    println(filesRow)
-    println(separator)
-
-    board.foreach(colums => {
-      colums.foreach(maybePos => {
-        if(maybePos.isDefined){
-          print(maybePos.get.name)
-        }else{
-          print("        ")
-        }
-        print("|")
-      })
-      println("\n")
-    })
-
-    println(separator)
-    println(filesRow)
-  }
-
-
-  var board: Array[Array[Option[Piece]]] = {
+  val boardMock: Array[Array[Option[Piece]]] = {
     Array.tabulate[Option[Piece]](8, 8) {
       (i, j) =>
         (i, j) match {

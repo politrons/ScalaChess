@@ -2,9 +2,6 @@ package com.politrons.model
 
 object ChessDomain {
 
-  case class Piece(name: String)
-
-
   case class ColumnFrom(value: Int)
 
   case class ColumnTo(value: Int)

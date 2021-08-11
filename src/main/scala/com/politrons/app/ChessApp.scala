@@ -1,6 +1,5 @@
 package com.politrons.app
 
-import com.politrons.engine.ChessEngine
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.{ColumnFrom, ColumnTo, Movement, Player, Player1, Player2, RowFrom, RowTo}
 import com.politrons.view.ChessBoard
@@ -11,9 +10,6 @@ import scala.util.{Failure, Success, Try}
 
 object ChessApp extends App {
 
-  val chessView = ChessBoard()
-  val chessEngine = ChessEngine(chessView)
-
   val path = getClass.getResource("/sample-moves.txt").getPath
   val inputFile = new UserInputFile(path)
 
@@ -23,7 +19,8 @@ object ChessApp extends App {
    * Recursive function which in each iteration we extract one of the movements.
    * In each iteration we pivot from one Player to another.
    * Once we create the [Movement] we pass to the [movePieceInBoard] function
-   * to move phisically the piece in the board.
+   * to move physically the piece in the board.
+   * In case the movement was invalid we keep with the player that made the wrong move.
    */
   @tailrec
   def runPlayerMovement(player: Player, moveNumber: Int): Unit = {
@@ -49,19 +46,19 @@ object ChessApp extends App {
    * the board and we print in console.
    */
   private def movePieceInBoard(movement: Movement): Try[Unit] = {
-    chessView.board(movement.rowFrom.value)(movement.columnFrom.value) match {
+    ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) match {
       case maybePiece@Some(piece) =>
-        chessEngine.isValidMovement(piece, movement) match {
+        piece.valid(movement) match {
           case Success(result) if result =>
-            chessView.board(movement.rowTo.value)(movement.columnTo.value) = maybePiece
-            chessView.board(movement.rowFrom.value)(movement.columnFrom.value) = None
+            ChessBoard.board(movement.rowTo.value)(movement.columnTo.value) = maybePiece
+            ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) = None
+            ChessBoard.printBoard()
+            Thread.sleep(4000)
+            Success()
           case Success(result) if !result =>
             val errorMessage = s"Invalid move for movement $movement"
             Failure(IllegalMovementException(errorMessage))
         }
-        chessView.printBoard()
-        Thread.sleep(4000)
-        Success()
       case None =>
         val errorMessage = s"Invalid movement. Piece does not exist in position ${movement.rowFrom.value}-${movement.columnFrom.value}"
         Failure(IllegalMovementException(errorMessage))
