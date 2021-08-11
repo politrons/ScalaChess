@@ -7,7 +7,7 @@ import com.politrons.view.ChessBoard
 import scala.util.Try
 
 /**
- * Rule Engine Class responsible for all the Chess Pieces movement rules.
+ * Rook Rule Engine Class responsible for all piece rules.
  */
 case class RookEngine() extends PieceEngine {
 
@@ -19,15 +19,13 @@ case class RookEngine() extends PieceEngine {
     }
   }
 
+  /**
+   * Rule that only
+   */
   private def rookMovementRule(movement: Movement): Boolean = {
-    (movement.rowFrom.value > movement.rowTo.value &&
-      movement.columnFrom.value == movement.columnTo.value) ||
-      (movement.rowFrom.value < movement.rowTo.value &&
-        movement.columnFrom.value == movement.columnTo.value) ||
-      (movement.rowFrom.value == movement.rowTo.value &&
-        movement.columnFrom.value > movement.columnTo.value) ||
-      (movement.rowFrom.value == movement.rowTo.value &&
-        movement.columnFrom.value < movement.columnTo.value)
+    val (vertical: Int, horizontal) = diffMovements(movement)
+    (vertical > 0 && horizontal == 0) ||
+      (vertical == 0 && horizontal > 0)
   }
 
   /**

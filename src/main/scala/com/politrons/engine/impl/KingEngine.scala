@@ -7,7 +7,7 @@ import com.politrons.view.ChessBoard
 import scala.util.Try
 
 /**
- * Rule Engine Class responsible for all the Chess Pieces movement rules.
+ * King Rule Engine Class responsible for all piece rules.
  */
 case class KingEngine() extends PieceEngine{
 

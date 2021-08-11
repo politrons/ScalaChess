@@ -7,7 +7,7 @@ import com.politrons.view.ChessBoard
 import scala.util.Try
 
 /**
- * Rule Engine Class responsible for all the Chess Pieces movement rules.
+ * Queen Rule Engine Class responsible for all piece rules.
  */
 case class QueenEngine() extends PieceEngine {
 
@@ -19,23 +19,9 @@ case class QueenEngine() extends PieceEngine {
   }
 
   private def queenMovementRule(movement: Movement): Boolean = {
-    bishopMovementRule(movement) || rookMovementRule(movement)
-  }
-
-  private def bishopMovementRule(movement: Movement): Boolean = {
     val (horizontal: Int, vertical: Int) = diffMovements(movement)
-    (horizontal > 0 && vertical > 0) && (horizontal == vertical)
-  }
-
-  private def rookMovementRule(movement: Movement): Boolean = {
-    (movement.rowFrom.value > movement.rowTo.value &&
-      movement.columnFrom.value == movement.columnTo.value) ||
-      (movement.rowFrom.value < movement.rowTo.value &&
-        movement.columnFrom.value == movement.columnTo.value) ||
-      (movement.rowFrom.value == movement.rowTo.value &&
-        movement.columnFrom.value > movement.columnTo.value) ||
-      (movement.rowFrom.value == movement.rowTo.value &&
-        movement.columnFrom.value < movement.columnTo.value)
+    ((horizontal > 0 && vertical > 0) && (horizontal == vertical)) ||
+      ((vertical > 0 && horizontal == 0) || (vertical == 0 && horizontal > 0))
   }
 
 }
