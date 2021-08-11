@@ -1,25 +1,26 @@
 package com.politrons.engine.impl
 
 import com.politrons.engine.PieceEngine
+import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.Movement
 import com.politrons.view.ChessBoard
 
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 /**
  * Pawn Rule Engine Class responsible for all piece rules.
  */
 case class PawnEngine() extends PieceEngine {
 
-  override def valid(movement: Movement): Try[Boolean] = {
-    Try {
-      isValidNextMove(movement) &&
-        pawnMovementRule(movement) &&
-        pawnPathRule(movement)
-    }
+  override def isValid(movement: Movement): Try[Unit] = {
+    for {
+      _ <- if (isValidNextMove(movement)) Success() else Failure(IllegalMovementException(s"Error validating $movement"))
+      _ <- if (isValidMovementRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Pawn $movement"))
+      _ <- if (isValidPathRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Pawn path $movement"))
+    } yield ()
   }
 
-  private def pawnMovementRule(movement: Movement): Boolean = {
+  private def isValidMovementRule(movement: Movement): Boolean = {
     val (vertical: Int, horizontal: Int) = diffMovements(movement)
     (horizontal == 0 && vertical == 1) ||
       (horizontal == 0 && vertical == 2) && (movement.number <= 2)
@@ -28,7 +29,7 @@ case class PawnEngine() extends PieceEngine {
   /**
    * Rule: There's no pieces during the path of the pawn until reach the spot.
    */
-  private def pawnPathRule(movement: Movement): Boolean = {
+  private def isValidPathRule(movement: Movement): Boolean = {
     (movement.rowFrom.value + 1 to movement.rowTo.value).count(row => {
       ChessBoard.board(row)(movement.columnTo.value).isDefined
     }) == 0

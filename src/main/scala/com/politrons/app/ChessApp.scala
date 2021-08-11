@@ -1,7 +1,7 @@
 package com.politrons.app
 
 import com.politrons.exceptions.IllegalMovementException
-import com.politrons.model.ChessDomain.{ColumnFrom, ColumnTo, Movement, Player, Player1, Player2, RowFrom, RowTo}
+import com.politrons.model.ChessDomain._
 import com.politrons.view.ChessBoard
 import com.whitehatgaming.UserInputFile
 
@@ -49,15 +49,12 @@ object ChessApp extends App {
     ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) match {
       case maybePiece@Some(piece) =>
         piece.valid(movement) match {
-          case Success(result) if result =>
+          case Success(_)=>
             ChessBoard.board(movement.rowTo.value)(movement.columnTo.value) = maybePiece
             ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) = None
             ChessBoard.printBoard(movement.player)
             Thread.sleep(2000)
             Success()
-          case Success(result) if !result =>
-            val errorMessage = s"Invalid move for movement $movement"
-            Failure(IllegalMovementException(errorMessage))
         }
       case None =>
         val errorMessage = s"Invalid movement. Piece does not exist in position ${movement.rowFrom.value}-${movement.columnFrom.value}"

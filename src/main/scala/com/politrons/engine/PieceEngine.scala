@@ -5,9 +5,12 @@ import com.politrons.model.ChessDomain.Movement
 
 import scala.util.Try
 
+/**
+ * Contract of all Rule Engine of the game
+ */
 trait PieceEngine {
 
-  def valid(movement: ChessDomain.Movement): Try[Boolean]
+  def isValid(movement: ChessDomain.Movement): Try[Unit]
 
   def isValidNextMove(movement: Movement): Boolean = {
     (movement.columnTo.value >= 0 || movement.columnTo.value <= 7) ||

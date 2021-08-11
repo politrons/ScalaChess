@@ -25,7 +25,6 @@ class ChessEngineRookSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     val result = piece.valid(Movement(Player1(), 1, ColumnFrom(3), RowFrom(3), ColumnTo(5), RowTo(3)))
     Then("The movement is ok")
     assert(result.isSuccess)
-    assert(result.get)
 
   }
 
@@ -36,7 +35,6 @@ class ChessEngineRookSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     val result = piece.valid( Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(5)))
     Then("The movement is ok")
     assert(result.isSuccess)
-    assert(result.get)
   }
 
   test("Rook rule validation move vertical and horizontal wrong") {
@@ -45,8 +43,7 @@ class ChessEngineRookSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     When("I invoke isValidateMove for Rook and vertical and horizontal movement")
     val result = piece.valid( Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(5), RowTo(5)))
     Then("The movement is wrong")
-    assert(result.isSuccess)
-    assert(!result.get)
+    assert(result.isFailure)
   }
 
   test("Rook rule validation no move vertical and horizontal wrong") {
@@ -55,8 +52,7 @@ class ChessEngineRookSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     When("I invoke isValidateMove for Rook and vertical and horizontal movement")
     val result = piece.valid( Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(1)))
     Then("The movement is wrong")
-    assert(result.isSuccess)
-    assert(!result.get)
+    assert(result.isFailure)
   }
 
   /**
@@ -71,7 +67,6 @@ class ChessEngineRookSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     val result = piece.valid( Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(2)))
     Then("The movement is ok")
     assert(result.isSuccess)
-    assert(result.get)
   }
 
   test("Rook path rule  mine piece at the end of path") {
@@ -80,8 +75,8 @@ class ChessEngineRookSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     When("I invoke isValidateMove for Rook")
     val result = piece.valid(Movement(Player2(), 1, ColumnFrom(7), RowFrom(7), ColumnTo(7), RowTo(6)))
     Then("The movement is wrong")
-    assert(result.isSuccess)
-    assert(!result.get)
+    assert(result.isFailure)
+
   }
 
   test("Rook path rule other piece during the path") {
@@ -91,8 +86,7 @@ class ChessEngineRookSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     When("I invoke isValidateMove for Rook")
     val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(3)))
     Then("The movement is wrong")
-    assert(result.isSuccess)
-    assert(!result.get)
+    assert(result.isFailure)
   }
 
 }
