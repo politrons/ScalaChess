@@ -84,6 +84,18 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     assert(!result.get)
   }
 
+  test("Bishop rule validation move diagonal to (2,4) but there's a piece in (2,3) ") {
+    Given("Chess engine instance")
+    val piece = Piece("Bishop", Player1(), BishopEngine())
+    ChessBoard.board(1)(3) = None
+    ChessBoard.board(2)(3) = Some(Piece("pawn", Player2(), PawnEngine()))
+    When("I invoke isValidateMove for Bishop")
+    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(2), RowFrom(0), ColumnTo(4), RowTo(2)))
+    Then("The movement is wrong")
+    assert(result.isSuccess)
+    assert(result.get)
+  }
+
 }
 
 

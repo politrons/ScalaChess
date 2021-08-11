@@ -35,8 +35,8 @@ object ChessBoard {
 
   var board: Array[Array[Option[Piece]]] = {
     Array.tabulate[Option[Piece]](8, 8) {
-      (i, j) =>
-        (i, j) match {
+      (row, column) =>
+        (row, column) match {
           //First row
           case (0, 0) => Some(Piece("  Rook  ", Player1(), RookEngine()))
           case (0, 1) => Some(Piece(" Knight ", Player1(), KnightEngine()))
