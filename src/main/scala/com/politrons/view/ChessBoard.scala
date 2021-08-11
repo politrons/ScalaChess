@@ -1,24 +1,29 @@
 package com.politrons.view
 
 import com.politrons.engine.impl.{BishopEngine, KingEngine, KnightEngine, PawnEngine, QueenEngine, RookEngine}
-import com.politrons.model.ChessDomain.{Player1, Player2}
+import com.politrons.model.ChessDomain.{Player, Player1, Player2}
 import com.politrons.model.Piece
 
 
 object ChessBoard {
 
-  val logo =
+  private val logo: String =
     """
       |闩ㄩセㄖ ⼕卄🝗丂丂
       |""".stripMargin
 
+  var player1Movements = 0
+  var player2Movements = 0
+
   /**
    * Prints current board state to the console in the ASCII mnemonic format
    */
-  def printBoard(): Unit = {
+  def printBoard(player:Player): Unit = {
+    increasePlayerMovement(player)
     val filesRow = """     A       B        C        D        E        F        G        H       """
     val separator = """+-------+--------+--------+--------+--------+--------+--------+--------+  """
     println(logo)
+    println(s"PLAYER 1: $player1Movements                                                 PLAYER 2: $player2Movements")
     println("########################################################################")
     println(filesRow)
     println(separator)
@@ -43,6 +48,13 @@ object ChessBoard {
 
   }
 
+
+  private def increasePlayerMovement(player: Player) = {
+    player match {
+      case Player1() => player1Movements += 1
+      case Player2() => player2Movements += 1
+    }
+  }
 
   var board: Array[Array[Option[Piece]]] = {
     Array.tabulate[Option[Piece]](8, 8) {

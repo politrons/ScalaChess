@@ -52,7 +52,7 @@ object ChessApp extends App {
           case Success(result) if result =>
             ChessBoard.board(movement.rowTo.value)(movement.columnTo.value) = maybePiece
             ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) = None
-            ChessBoard.printBoard()
+            ChessBoard.printBoard(movement.player)
             Thread.sleep(2000)
             Success()
           case Success(result) if !result =>
