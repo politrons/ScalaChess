@@ -18,6 +18,9 @@ case class QueenEngine() extends PieceEngine {
     }
   }
 
+  /**
+   * Rule:Valid that the movement is in each possible direction.
+   */
   private def queenMovementRule(movement: Movement): Boolean = {
     val (horizontal: Int, vertical: Int) = diffMovements(movement)
     ((horizontal > 0 && vertical > 0) && (horizontal == vertical)) ||

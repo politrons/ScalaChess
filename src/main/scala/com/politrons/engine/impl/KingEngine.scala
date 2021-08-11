@@ -17,6 +17,9 @@ case class KingEngine() extends PieceEngine{
     }
   }
 
+  /**
+   * Rule:Valid that the movement is just one move in all possible directions
+   */
   private def kingMovementRule(movement: Movement): Boolean = {
     val (horizontal: Int, vertical: Int) = diffMovements(movement)
     (horizontal <= 1 && vertical <= 1) &&

@@ -20,7 +20,7 @@ case class RookEngine() extends PieceEngine {
   }
 
   /**
-   * Rule that only
+   * Rule: Valid that the piece only can move horizontal or vertical.
    */
   private def rookMovementRule(movement: Movement): Boolean = {
     val (vertical: Int, horizontal) = diffMovements(movement)
