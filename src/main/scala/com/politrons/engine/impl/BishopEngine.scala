@@ -33,10 +33,8 @@ case class BishopEngine() extends PieceEngine {
    * Rule: Check if all previous diagonals movements from start to end has any piece
    */
   private def bishopPathRule(movement: Movement): Boolean = {
-    (movement.rowFrom.value + 1 until movement.rowTo.value).count(row => {
-      (movement.columnFrom.value + 1 until movement.columnTo.value).count(column => {
-        ChessBoard.board(row)(column).isDefined
-      }) == 0
+    (movement.rowFrom.value + 1 until movement.rowTo.value).count(i => {
+        ChessBoard.board(i)(i).isDefined
     }) == 0
   }
 

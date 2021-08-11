@@ -14,6 +14,10 @@ class ChessEngineRookSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     ChessBoard.board = boardMock
   }
 
+  /**
+   * MOVEMENT RULES
+   * ---------------
+   */
   test("Rook rule validation move horizontal succeed") {
     Given("Chess engine instance")
     val piece = Piece("Rook", RookEngine())

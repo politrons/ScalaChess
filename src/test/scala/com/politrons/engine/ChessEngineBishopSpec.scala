@@ -1,6 +1,6 @@
 package com.politrons.engine
 
-import com.politrons.engine.impl.BishopEngine
+import com.politrons.engine.impl.{BishopEngine, PawnEngine}
 import com.politrons.model.ChessDomain._
 import com.politrons.model.Piece
 import com.politrons.utils.BoardMock.boardMock
@@ -14,6 +14,10 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     ChessBoard.board = boardMock
   }
 
+  /**
+   * MOVEMENT RULES
+   * ---------------
+   */
   test("Bishop rule validation move horizontal 1 and vertical 1 succeed") {
     Given("Chess engine instance")
     val piece = Piece("Bishop", BishopEngine())
@@ -59,6 +63,22 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     val piece = Piece("Bishop", BishopEngine())
     When("I invoke isValidateMove for Bishop")
     val result = piece.valid( Movement(Player1(), 1, ColumnFrom(5), RowFrom(5), ColumnTo(3), RowTo(4)))
+    Then("The movement is wrong")
+    assert(result.isSuccess)
+    assert(!result.get)
+  }
+
+  /**
+   * PATH RULES
+   * ----------
+   */
+
+  test("Bishop rule validation move diagonal to (3,3) but there's a piece in (2,2) ") {
+    Given("Chess engine instance")
+    val piece = Piece("Bishop", BishopEngine())
+    ChessBoard.board(2)(2) = Some(Piece("pawn", PawnEngine()))
+    When("I invoke isValidateMove for Bishop")
+    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(3), RowTo(3)))
     Then("The movement is wrong")
     assert(result.isSuccess)
     assert(!result.get)
