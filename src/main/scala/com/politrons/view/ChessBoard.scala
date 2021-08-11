@@ -47,7 +47,6 @@ object ChessBoard {
     println(separator)
     println(filesRow)
     println("########################################################################")
-
   }
 
   var board: Array[Array[Option[Piece]]] = {

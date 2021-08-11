@@ -8,12 +8,19 @@ import com.whitehatgaming.UserInputFile
 import scala.annotation.tailrec
 import scala.util.{Failure, Success, Try}
 
-object ChessApp extends App {
+object ChessApp {
 
-  val path = getClass.getResource("/sample-moves.txt").getPath
-  val inputFile = new UserInputFile(path)
+  var path: String = _
+  var chessClock: Int = _
+  var inputFile: UserInputFile = _
 
-  runPlayerMovement(Player1(), 1)
+  def main(args: Array[String]): Unit = {
+    val fileName = args(0)
+    chessClock = args(1).toInt
+    path = getClass.getResource(fileName).getPath
+    inputFile = new UserInputFile(path)
+    runPlayerMovement(Player1(), 1)
+  }
 
   /**
    * Recursive function which in each iteration we extract one of the movements.
@@ -49,12 +56,13 @@ object ChessApp extends App {
     ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) match {
       case maybePiece@Some(piece) =>
         piece.valid(movement) match {
-          case Success(_)=>
+          case Success(_) =>
             ChessBoard.board(movement.rowTo.value)(movement.columnTo.value) = maybePiece
             ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) = None
             ChessBoard.printBoard(movement.player)
-            Thread.sleep(2000)
+            Thread.sleep(chessClock)
             Success()
+          case Failure(t) => Failure(t)
         }
       case None =>
         val errorMessage = s"Invalid movement. Piece does not exist in position ${movement.rowFrom.value}-${movement.columnFrom.value}"
