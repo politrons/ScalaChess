@@ -1,16 +1,16 @@
 package com.politrons.engine
 
-import com.politrons.engine.impl.QueenEngine
+import com.politrons.engine.impl.{PawnEngine, QueenEngine, RookEngine}
 import com.politrons.model.ChessDomain._
 import com.politrons.model.Piece
 import com.politrons.utils.BoardMock.boardMock
 import com.politrons.view.ChessBoard
 import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.{BeforeAndAfterAll, GivenWhenThen}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen}
 
-class ChessEngineQueenSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterAll {
+class ChessEngineQueenSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterEach {
 
-  override def beforeAll(): Unit = {
+  override def beforeEach(): Unit = {
     ChessBoard.board = boardMock
   }
 
@@ -18,7 +18,7 @@ class ChessEngineQueenSpec extends AnyFunSuite with GivenWhenThen with BeforeAnd
     Given("Chess engine instance")
     val piece = Piece("Queen",Player1(), QueenEngine())
     When("I invoke isValidateMove for Queen and horizontal movement")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(5), RowTo(1)))
+    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(2), RowTo(2)))
     Then("The movement is ok")
     assert(result.isSuccess)
     assert(result.get)
@@ -78,7 +78,7 @@ class ChessEngineQueenSpec extends AnyFunSuite with GivenWhenThen with BeforeAnd
     Given("Chess engine instance")
     val piece = Piece("Queen",Player1(), QueenEngine())
     When("I invoke isValidateMove for Queen")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(5), RowFrom(5), ColumnTo(1), RowTo(1)))
+    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(5), RowFrom(5), ColumnTo(4), RowTo(4)))
     Then("The movement is ok")
     assert(result.isSuccess)
     assert(result.get)
@@ -99,6 +99,20 @@ class ChessEngineQueenSpec extends AnyFunSuite with GivenWhenThen with BeforeAnd
     val piece = Piece("Queen",Player1(), QueenEngine())
     When("I invoke isValidateMove for Queen")
     val result = piece.valid(Movement(Player1(), 1, ColumnFrom(5), RowFrom(5), ColumnTo(3), RowTo(4)))
+    Then("The movement is wrong")
+    assert(result.isSuccess)
+    assert(!result.get)
+  }
+
+  /**
+   * PATH RULES
+   * ----------
+   */
+  test("Queen path rule other piece in the path") {
+    Given("Chess engine instance")
+    val piece = Piece("Queen",Player1(), RookEngine())
+    When("I invoke isValidateMove for Queen")
+    val result = piece.valid( Movement(Player1(), 1, ColumnFrom(3), RowFrom(0), ColumnTo(4), RowTo(1)))
     Then("The movement is wrong")
     assert(result.isSuccess)
     assert(!result.get)

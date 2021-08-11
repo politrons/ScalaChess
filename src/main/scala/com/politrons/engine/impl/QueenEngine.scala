@@ -15,7 +15,8 @@ case class QueenEngine() extends PieceEngine {
   override def valid(movement: Movement): Try[Boolean] = {
     Try {
       isValidNextMove(movement) &&
-        queenMovementRule(movement)
+        queenMovementRule(movement) &&
+        queenPathRule(movement)
     }
   }
 

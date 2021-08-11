@@ -6,11 +6,11 @@ import com.politrons.model.Piece
 import com.politrons.utils.BoardMock.boardMock
 import com.politrons.view.ChessBoard
 import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.{BeforeAndAfterAll, GivenWhenThen}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen}
 
-class ChessEngineKingSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterAll {
+class ChessEngineKingSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterEach {
 
-  override def beforeAll(): Unit = {
+  override def beforeEach(): Unit = {
     ChessBoard.board = boardMock
   }
 
