@@ -7,12 +7,19 @@ import com.politrons.model.Piece
 
 object ChessBoard {
 
+  val logo =
+    """
+      |闩ㄩセㄖ ⼕卄🝗丂丂
+      |""".stripMargin
+
   /**
    * Prints current board state to the console in the ASCII mnemonic format
    */
   def printBoard(): Unit = {
     val filesRow = """     A       B        C        D        E        F        G        H       """
     val separator = """+-------+--------+--------+--------+--------+--------+--------+--------+  """
+    println(logo)
+    println("########################################################################")
     println(filesRow)
     println(separator)
 
@@ -21,10 +28,9 @@ object ChessBoard {
       print(rowNumber)
       rowNumber -= 1
       columns.foreach(maybePos => {
-        if (maybePos.isDefined) {
-          print(maybePos.get.name)
-        } else {
-          print("        ")
+        maybePos match {
+          case Some(piece) => print(piece.name)
+          case None => print("        ")
         }
         print("|")
       })

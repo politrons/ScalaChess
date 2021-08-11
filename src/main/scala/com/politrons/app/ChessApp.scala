@@ -53,7 +53,7 @@ object ChessApp extends App {
             ChessBoard.board(movement.rowTo.value)(movement.columnTo.value) = maybePiece
             ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) = None
             ChessBoard.printBoard()
-            Thread.sleep(4000)
+            Thread.sleep(2000)
             Success()
           case Success(result) if !result =>
             val errorMessage = s"Invalid move for movement $movement"
