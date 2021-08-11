@@ -16,8 +16,11 @@ object ChessBoard {
     println(filesRow)
     println(separator)
 
-    board.foreach(colums => {
-      colums.foreach(maybePos => {
+    var rowNumber = 8
+    board.foreach(columns => {
+      print(rowNumber)
+      rowNumber -= 1
+      columns.foreach(maybePos => {
         if (maybePos.isDefined) {
           print(maybePos.get.name)
         } else {
@@ -30,6 +33,8 @@ object ChessBoard {
 
     println(separator)
     println(filesRow)
+    println("########################################################################")
+
   }
 
 
