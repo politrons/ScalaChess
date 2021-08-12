@@ -12,12 +12,37 @@ object PathRules {
    * Rule:Generic Path rule to check that there's no pieces during the diagonal path
    */
   def diagonalPathRule(movement: Movement): Boolean = {
-    val result = (movement.rowFrom.value + 1 until movement.rowTo.value).count(row => {
-      (movement.columnFrom.value + 1 until movement.columnTo.value).count(column => {
-        val maybePiece = ChessBoard.board(row)(column)
+    var column = movement.columnFrom.value
+
+    val result = if (movement.rowFrom.value > movement.rowTo.value) {
+      (movement.rowFrom.value - 1 until movement.rowTo.value by -1).count(row => {
+        if (movement.columnFrom.value > movement.columnTo.value) {
+          column -= 1
+        } else {
+          column += 1
+        }
+        val maybePiece = if (column >= 0 && column <= 7) {
+          ChessBoard.board(row)(column)
+        } else {
+          None
+        }
         maybePiece.isDefined
-      }) > 0
-    }) == 0
+      }) == 0
+    } else {
+      (movement.rowFrom.value + 1 until movement.rowTo.value by 1).count(row => {
+        if (movement.columnFrom.value > movement.columnTo.value) {
+          column -= 1
+        } else {
+          column += 1
+        }
+        val maybePiece = if (column >= 0 && column <= 7) {
+          ChessBoard.board(row)(column)
+        } else {
+          None
+        }
+        maybePiece.isDefined
+      }) == 0
+    }
     result && destinationMovementNoPieceOfMine(movement)
   }
 

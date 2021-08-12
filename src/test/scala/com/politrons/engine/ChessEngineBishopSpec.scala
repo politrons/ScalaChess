@@ -1,6 +1,6 @@
 package com.politrons.engine
 
-import com.politrons.engine.impl.{BishopEngine, PawnEngine, RookEngine}
+import com.politrons.engine.impl.{BishopEngine, PawnEngine}
 import com.politrons.model.ChessDomain._
 import com.politrons.model.Piece
 import com.politrons.utils.BoardMock

@@ -47,5 +47,15 @@ class ChessAppSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterEac
 
   }
 
+
+  test("Check mate with scholar") {
+    Given("Chess App running")
+    ChessApp.main(Array("/scholar-checkmate.txt", "10"))
+    When("I check for several wrong movements in the board")
+
+    Then("")
+
+  }
+
 }
 
