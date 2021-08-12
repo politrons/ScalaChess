@@ -4,6 +4,7 @@ import com.politrons.engine.PieceEngine
 import com.politrons.engine.impl.PathRules.horizontalOrVerticalPathRule
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.Movement
+import com.politrons.model.Piece
 import com.politrons.view.ChessBoard
 
 import scala.util.{Failure, Success, Try}
@@ -39,43 +40,34 @@ case class RookEngine() extends PieceEngine {
     horizontalOrVerticalPathRule(vertical, movement)
   }
 
-
+  /**
+   * Function that check if in the horizontal or vertical path the first piece found is a King of the opponent.
+   */
   override def isCheck(movement: Movement): Try[Boolean] = {
     Try {
-      val (vertical: Int, _) = diffMovements(movement)
-      val result = if (vertical > 0) {
-        val definedRight = (movement.rowTo.value + 1 to 7).exists(row => {
-          val maybePiece = ChessBoard.board(row)(movement.columnFrom.value)
-          maybePiece.isDefined &&
-            maybePiece.get.player != movement.player &&
-            maybePiece.get.name.trim.toLowerCase() == "king"
-        })
+      val definedVerticalRight = getKingInCleanPath(movement.rowTo.value + 1, 7, movement)
+      val definedVerticalLeft = getKingInCleanPath(0, movement.rowTo.value - 1, movement)
 
-        val definedLeft = (0 until movement.rowTo.value).exists(row => {
-          val maybePiece = ChessBoard.board(row)(movement.columnFrom.value)
-          maybePiece.isDefined &&
-            maybePiece.get.player != movement.player &&
-            maybePiece.get.name.trim.toLowerCase() == "king"
-        })
-        definedRight || definedLeft
-      } else {
-        val definedRight = (movement.columnTo.value + 1 to 7).exists(row => {
-          val maybePiece = ChessBoard.board(row)(movement.columnFrom.value)
-          maybePiece.isDefined &&
-            maybePiece.get.player != movement.player &&
-            maybePiece.get.name.trim.toLowerCase() == "king"
-        })
+      val definedHorizontalRight = getKingInCleanPath(movement.columnTo.value + 1, 7, movement)
+      val definedHorizontalLeft = getKingInCleanPath(0, movement.columnTo.value - 1, movement)
 
-        val definedLeft = (0 until movement.columnTo.value).exists(row => {
-          val maybePiece = ChessBoard.board(row)(movement.columnFrom.value)
-          maybePiece.isDefined &&
-            maybePiece.get.player != movement.player &&
-            maybePiece.get.name.trim.toLowerCase() == "king"
-        })
-        definedRight || definedLeft
-      }
-      result
+      definedHorizontalRight.isDefined ||
+        definedHorizontalLeft.isDefined ||
+        definedVerticalRight.isDefined ||
+        definedVerticalLeft.isDefined
     }
+  }
+
+  /**
+   * Function to check if the first defined piece in the path is a King
+   */
+  def getKingInCleanPath(from: Int, to: Int, movement: Movement): Option[Piece] = {
+    (from to to)
+      .flatMap(row => ChessBoard.board(row)(movement.columnFrom.value))
+      .take(1)
+      .find(piece =>
+        piece.player != movement.player &&
+          piece.name.trim.toLowerCase() == "king")
   }
 
 }
