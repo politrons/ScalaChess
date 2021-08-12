@@ -144,6 +144,56 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     assert(isCheck.get)
   }
 
+  test("Bishop check rule bishop row++ and column++ with piece between") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("Bishop",Player1(), BishopEngine())
+    ChessBoard.board(5)(1) = Some(piece)
+    val movement = Movement(Player1(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(1), RowTo(5))
+    When("I invoke isCheck for Bishop")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(!isCheck.get)
+  }
+
+  test("Bishop check rule bishop row++ and column++") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("Bishop",Player1(), BishopEngine())
+    ChessBoard.board(6)(2) = None
+    ChessBoard.board(5)(1) = Some(piece)
+    val movement = Movement(Player1(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(1), RowTo(5))
+    When("I invoke isCheck for Bishop")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
+  }
+
+  test("Bishop check rule bishop row-- and column++ with piece between") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("bishop",Player2(), BishopEngine())
+    ChessBoard.board(3)(0) = Some(piece)
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(0), RowTo(3))
+    When("I invoke isCheck for Bishop")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(!isCheck.get)
+  }
+
+  test("Bishop check rule bishop row-- and column++") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("bishop",Player2(), BishopEngine())
+    ChessBoard.board(1)(2) = None
+    ChessBoard.board(3)(0) = Some(piece)
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(0), RowTo(3))
+    When("I invoke isCheck for Bishop")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
+  }
+
 }
 
 

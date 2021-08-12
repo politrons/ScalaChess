@@ -37,6 +37,10 @@ case class BishopEngine() extends PieceEngine {
     diagonalPathRule(movement)
   }
 
+  /**
+   * Rule Check: Go in all possible diagonals, and just obtain the first defined piece in the path.
+   * If that piece is a King is consider a Check.
+   */
   override def isCheck(movement: Movement): Try[Boolean] = {
     Try {
       val currentRow = movement.rowTo.value
@@ -45,7 +49,11 @@ case class BishopEngine() extends PieceEngine {
       val definedRowPlusColumnLess = (currentRow + 1 to 7 by 1)
         .flatMap(row => {
           currentColumn -= 1
-          ChessBoard.board(row)(currentColumn)
+          if (currentColumn >= 0) {
+            ChessBoard.board(row)(currentColumn)
+          } else {
+            None
+          }
         })
         .take(1)
         .find(piece =>
@@ -57,7 +65,43 @@ case class BishopEngine() extends PieceEngine {
       val definedRowLessColumnLess = (currentRow - 1 to 0 by -1)
         .flatMap(row => {
           currentColumn -= 1
-          ChessBoard.board(row)(currentColumn)
+          if (currentColumn >= 0) {
+            ChessBoard.board(row)(currentColumn)
+          } else {
+            None
+          }
+        })
+        .take(1)
+        .find(piece =>
+          piece.player != movement.player &&
+            piece.name.trim.toLowerCase() == "king")
+
+      //Row ++ Column ++
+      currentColumn = movement.columnTo.value
+      val definedRowPlusColumnPlus = (currentRow + 1 to 7 by 1)
+        .flatMap(row => {
+          currentColumn += 1
+          if (currentColumn <= 7) {
+            ChessBoard.board(row)(currentColumn)
+          } else {
+            None
+          }
+        })
+        .take(1)
+        .find(piece =>
+          piece.player != movement.player &&
+            piece.name.trim.toLowerCase() == "king")
+
+      //Row -- Column ++
+      currentColumn = movement.columnTo.value
+      val definedRowLessColumnPlus = (currentRow - 1 to 0 by -1)
+        .flatMap(row => {
+          currentColumn += 1
+          if (currentColumn <= 7) {
+            ChessBoard.board(row)(currentColumn)
+          } else {
+            None
+          }
         })
         .take(1)
         .find(piece =>
@@ -65,7 +109,9 @@ case class BishopEngine() extends PieceEngine {
             piece.name.trim.toLowerCase() == "king")
 
       definedRowPlusColumnLess.isDefined ||
-        definedRowLessColumnLess.isDefined
+        definedRowLessColumnLess.isDefined ||
+        definedRowPlusColumnPlus.isDefined ||
+        definedRowLessColumnPlus.isDefined
     }
   }
 }
