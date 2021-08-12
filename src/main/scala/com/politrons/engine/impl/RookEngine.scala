@@ -45,11 +45,11 @@ case class RookEngine() extends PieceEngine {
    */
   override def isCheck(movement: Movement): Try[Boolean] = {
     Try {
-      val definedVerticalRight = getKingInCleanPath(movement.rowTo.value + 1, 7, movement)
-      val definedVerticalLeft = getKingInCleanPath(0, movement.rowTo.value - 1, movement)
+      val definedVerticalRight = getKingInCleanPath(movement.rowTo.value + 1, 7, 1, movement)
+      val definedVerticalLeft = getKingInCleanPath(movement.rowTo.value - 1, 0, -1, movement)
 
-      val definedHorizontalRight = getKingInCleanPath(movement.columnTo.value + 1, 7, movement)
-      val definedHorizontalLeft = getKingInCleanPath(0, movement.columnTo.value - 1, movement)
+      val definedHorizontalRight = getKingInCleanPath(movement.columnTo.value + 1, 7, 1, movement)
+      val definedHorizontalLeft = getKingInCleanPath(movement.columnTo.value - 1, 0, -1, movement)
 
       definedHorizontalRight.isDefined ||
         definedHorizontalLeft.isDefined ||
@@ -61,8 +61,8 @@ case class RookEngine() extends PieceEngine {
   /**
    * Function to check if the first defined piece in the path is a King
    */
-  def getKingInCleanPath(from: Int, to: Int, movement: Movement): Option[Piece] = {
-    (from to to)
+  def getKingInCleanPath(from: Int, to: Int, IncDec: Int, movement: Movement): Option[Piece] = {
+    (from to to by IncDec)
       .flatMap(row => ChessBoard.board(row)(movement.columnFrom.value))
       .take(1)
       .find(piece =>

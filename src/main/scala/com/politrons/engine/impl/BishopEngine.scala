@@ -4,6 +4,7 @@ import com.politrons.engine.PieceEngine
 import com.politrons.engine.impl.PathRules.diagonalPathRule
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.Movement
+import com.politrons.view.ChessBoard
 
 import scala.util.{Failure, Success, Try}
 
@@ -36,5 +37,19 @@ case class BishopEngine() extends PieceEngine {
     diagonalPathRule(movement)
   }
 
-  override def isCheck(movement: Movement): Try[Boolean] = Success(false)
+  override def isCheck(movement: Movement): Try[Boolean] = {
+
+//    val result = (movement.rowTo.value + 1 to 7).count(row => {
+
+//      (movement.columnFrom.value + 1 to 7).flatMap(column => {
+//        ChessBoard.board(row)(column)
+//          .take(1)
+//          .find(piece =>
+//            piece.player != movement.player &&
+//              piece.name.trim.toLowerCase() == "king")
+//      })
+//    }) == 0
+
+    Success(false)
+  }
 }
