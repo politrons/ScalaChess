@@ -17,12 +17,14 @@ object ChessBoard {
   private var player1Movements = 0
   private var player2Movements = 0
 
+  var inCheckMessage = ""
+
   /**
    * Prints current board state to the console in the ASCII mnemonic format
    */
   def printBoard(player: Player, isCheck: Boolean): Unit = {
     increasePlayerMovement(player)
-    val inCheckMessage = createInCheckMessage(player, isCheck)
+    inCheckMessage = createInCheckMessage(player, isCheck)
 
     val filesRow = """     A       B        C        D        E        F        G        H       """
     val separator = """+-------+--------+--------+--------+--------+--------+--------+--------+  """

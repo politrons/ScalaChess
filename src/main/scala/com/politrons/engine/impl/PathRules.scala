@@ -13,34 +13,15 @@ object PathRules {
    */
   def diagonalPathRule(movement: Movement): Boolean = {
     var column = movement.columnFrom.value
-
     val result = if (movement.rowFrom.value > movement.rowTo.value) {
       (movement.rowFrom.value - 1 until movement.rowTo.value by -1).count(row => {
-        if (movement.columnFrom.value > movement.columnTo.value) {
-          column -= 1
-        } else {
-          column += 1
-        }
-        val maybePiece = if (column >= 0 && column <= 7) {
-          ChessBoard.board(row)(column)
-        } else {
-          None
-        }
-        maybePiece.isDefined
+        column = incDecColumn(movement, column)
+        hasDefinedPieceInPosition(column, row)
       }) == 0
     } else {
       (movement.rowFrom.value + 1 until movement.rowTo.value by 1).count(row => {
-        if (movement.columnFrom.value > movement.columnTo.value) {
-          column -= 1
-        } else {
-          column += 1
-        }
-        val maybePiece = if (column >= 0 && column <= 7) {
-          ChessBoard.board(row)(column)
-        } else {
-          None
-        }
-        maybePiece.isDefined
+        column = incDecColumn(movement, column)
+        hasDefinedPieceInPosition(column, row)
       }) == 0
     }
     result && destinationMovementNoPieceOfMine(movement)
@@ -72,6 +53,23 @@ object PathRules {
       case Some(piece) => piece.player != movement.player
       case None => true
     }
+  }
+
+  private def incDecColumn(movement: Movement, column: Int): Int = {
+    if (movement.columnFrom.value > movement.columnTo.value) {
+      column - 1
+    } else {
+      column + 1
+    }
+  }
+
+  private def hasDefinedPieceInPosition(column: Int, row: Int) = {
+    val maybePiece = if (column >= 0 && column <= 7) {
+      ChessBoard.board(row)(column)
+    } else {
+      None
+    }
+    maybePiece.isDefined
   }
 
 }
