@@ -38,18 +38,34 @@ case class BishopEngine() extends PieceEngine {
   }
 
   override def isCheck(movement: Movement): Try[Boolean] = {
+    Try {
+      val currentRow = movement.rowTo.value
+      var currentColumn = movement.columnTo.value
+      //Row ++  Column --
+      val definedRowPlusColumnLess = (currentRow + 1 to 7 by 1)
+        .flatMap(row => {
+          currentColumn -= 1
+          ChessBoard.board(row)(currentColumn)
+        })
+        .take(1)
+        .find(piece =>
+          piece.player != movement.player &&
+            piece.name.trim.toLowerCase() == "king")
 
-//    val result = (movement.rowTo.value + 1 to 7).count(row => {
+      //Row -- Column --
+      currentColumn = movement.columnTo.value
+      val definedRowLessColumnLess = (currentRow - 1 to 0 by -1)
+        .flatMap(row => {
+          currentColumn -= 1
+          ChessBoard.board(row)(currentColumn)
+        })
+        .take(1)
+        .find(piece =>
+          piece.player != movement.player &&
+            piece.name.trim.toLowerCase() == "king")
 
-//      (movement.columnFrom.value + 1 to 7).flatMap(column => {
-//        ChessBoard.board(row)(column)
-//          .take(1)
-//          .find(piece =>
-//            piece.player != movement.player &&
-//              piece.name.trim.toLowerCase() == "king")
-//      })
-//    }) == 0
-
-    Success(false)
+      definedRowPlusColumnLess.isDefined ||
+        definedRowLessColumnLess.isDefined
+    }
   }
 }

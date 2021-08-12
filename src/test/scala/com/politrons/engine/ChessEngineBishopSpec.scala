@@ -1,6 +1,6 @@
 package com.politrons.engine
 
-import com.politrons.engine.impl.{BishopEngine, PawnEngine}
+import com.politrons.engine.impl.{BishopEngine, PawnEngine, RookEngine}
 import com.politrons.model.ChessDomain._
 import com.politrons.model.Piece
 import com.politrons.utils.BoardMock
@@ -88,6 +88,60 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(2), RowFrom(0), ColumnTo(4), RowTo(2)))
     Then("The movement is wrong")
     assert(result.isSuccess)
+  }
+
+  /**
+   * CHECK RULES
+   * ------------
+   */
+  test("Bishop check rule, rook is in front of king with other piece in between") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("bishop",Player2(), BishopEngine())
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(6), RowTo(3))
+    ChessBoard.board(3)(6) = Some(piece)
+    When("I invoke isCheck for Bishop")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is not check")
+    assert(isCheck.isSuccess)
+    assert(!isCheck.get)
+  }
+
+  test("Bishop check rule bishop row-- and column--") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("bishop",Player2(), BishopEngine())
+    ChessBoard.board(1)(4) = None
+    ChessBoard.board(3)(6) = Some(piece)
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(6), RowTo(3))
+    When("I invoke isCheck for Bishop")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
+  }
+
+  test("Bishop check rule bishop row++ and column-- with piece between") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("Bishop",Player1(), BishopEngine())
+    ChessBoard.board(5)(5) = Some(piece)
+    val movement = Movement(Player1(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(5), RowTo(5))
+    When("I invoke isCheck for Bishop")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(!isCheck.get)
+  }
+
+  test("Bishop check rule bishop row++ and column--") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("Bishop",Player1(), BishopEngine())
+    ChessBoard.board(6)(4) = None
+    ChessBoard.board(5)(5) = Some(piece)
+    val movement = Movement(Player1(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(5), RowTo(5))
+    When("I invoke isCheck for Bishop")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
   }
 
 }

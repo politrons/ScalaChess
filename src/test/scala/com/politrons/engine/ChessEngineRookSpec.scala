@@ -100,7 +100,7 @@ class ChessEngineRookSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     ChessBoard.board(4)(3) = Some(piece)
     When("I invoke isCheck for Rook")
     val isCheck = piece.isCheck(movement)
-    Then("The movement is check")
+    Then("The movement is not check")
     assert(isCheck.isSuccess)
     assert(!isCheck.get)
   }
