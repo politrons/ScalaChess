@@ -39,4 +39,43 @@ case class RookEngine() extends PieceEngine {
     horizontalOrVerticalPathRule(vertical, movement)
   }
 
+
+  override def isCheck(movement: Movement): Try[Boolean] = {
+    Try {
+      val (vertical: Int, _) = diffMovements(movement)
+      val result = if (vertical > 0) {
+        val definedRight = (movement.rowTo.value + 1 to 7).exists(row => {
+          val maybePiece = ChessBoard.board(row)(movement.columnFrom.value)
+          maybePiece.isDefined &&
+            maybePiece.get.player != movement.player &&
+            maybePiece.get.name.trim.toLowerCase() == "king"
+        })
+
+        val definedLeft = (0 until movement.rowTo.value).exists(row => {
+          val maybePiece = ChessBoard.board(row)(movement.columnFrom.value)
+          maybePiece.isDefined &&
+            maybePiece.get.player != movement.player &&
+            maybePiece.get.name.trim.toLowerCase() == "king"
+        })
+        definedRight || definedLeft
+      } else {
+        val definedRight = (movement.columnTo.value + 1 to 7).exists(row => {
+          val maybePiece = ChessBoard.board(row)(movement.columnFrom.value)
+          maybePiece.isDefined &&
+            maybePiece.get.player != movement.player &&
+            maybePiece.get.name.trim.toLowerCase() == "king"
+        })
+
+        val definedLeft = (0 until movement.columnTo.value).exists(row => {
+          val maybePiece = ChessBoard.board(row)(movement.columnFrom.value)
+          maybePiece.isDefined &&
+            maybePiece.get.player != movement.player &&
+            maybePiece.get.name.trim.toLowerCase() == "king"
+        })
+        definedRight || definedLeft
+      }
+      result
+    }
+  }
+
 }

@@ -41,4 +41,5 @@ case class KingEngine() extends PieceEngine {
     }
   }
 
+  override def isCheck(movement: Movement): Try[Boolean] = Success(false)
 }

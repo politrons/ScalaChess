@@ -36,4 +36,5 @@ case class BishopEngine() extends PieceEngine {
     diagonalPathRule(movement)
   }
 
+  override def isCheck(movement: Movement): Try[Boolean] = Success(false)
 }

@@ -20,12 +20,14 @@ object ChessBoard {
   /**
    * Prints current board state to the console in the ASCII mnemonic format
    */
-  def printBoard(player:Player): Unit = {
+  def printBoard(player: Player, isCheck: Boolean): Unit = {
     increasePlayerMovement(player)
+    val inCheckMessage = createInCheckMessage(player, isCheck)
+
     val filesRow = """     A       B        C        D        E        F        G        H       """
     val separator = """+-------+--------+--------+--------+--------+--------+--------+--------+  """
     println(logo)
-    println(s"PLAYER 1: $player1Movements                                                 PLAYER 2: $player2Movements")
+    println(s"PLAYER 1: $player1Movements                  ${inCheckMessage}               PLAYER 2: $player2Movements")
     println("########################################################################")
     println(filesRow)
     println(separator)
@@ -98,6 +100,20 @@ object ChessBoard {
     }
   }
 
+  /**
+   * Function to calc and create the [in check] message.
+   */
+  private def createInCheckMessage(player: Player, isCheck: Boolean) = {
+    player match {
+      case Player1() if isCheck => "Player 2 in Check"
+      case Player2() if isCheck => "Player 1 in Check"
+      case _ => "                 "
+    }
+  }
+
+  /**
+   * Function to increase the player's  movements.
+   */
   private def increasePlayerMovement(player: Player): Unit = {
     player match {
       case Player1() => player1Movements += 1

@@ -55,11 +55,20 @@ object ChessApp {
   private def movePieceInBoard(movement: Movement): Try[Unit] = {
     ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) match {
       case maybePiece@Some(piece) =>
-        piece.valid(movement) match {
+        piece.isValid(movement) match {
           case Success(_) =>
             ChessBoard.board(movement.rowTo.value)(movement.columnTo.value) = maybePiece
             ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) = None
-            ChessBoard.printBoard(movement.player)
+
+            val isCheck = piece.isCheck(movement) match {
+              case Success(result) if result => true
+              case Success(result) if !result => false
+              case Failure(t) =>
+                println(s"Error checking if King is in check. Caused by $t")
+                false
+            }
+
+            ChessBoard.printBoard(movement.player, isCheck)
             Thread.sleep(chessClock)
             Success()
           case Failure(t) => Failure(t)

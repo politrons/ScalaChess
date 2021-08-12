@@ -12,6 +12,8 @@ trait PieceEngine {
 
   def isValid(movement: ChessDomain.Movement): Try[Unit]
 
+  def isCheck(movement: Movement):Try[Boolean]
+
   def isValidNextMove(movement: Movement): Boolean = {
     (movement.columnTo.value >= 0 || movement.columnTo.value <= 7) ||
       (movement.rowTo.value >= 0 || movement.rowTo.value <= 7)

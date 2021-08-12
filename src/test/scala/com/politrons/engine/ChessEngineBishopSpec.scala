@@ -23,7 +23,7 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     Given("Chess engine instance")
     val piece = Piece("Bishop", Player1(), BishopEngine())
     When("I invoke isValidateMove for Bishop")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(2), RowTo(2)))
+    val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(2), RowTo(2)))
     Then("The movement is ok")
     assert(result.isSuccess)
   }
@@ -32,7 +32,7 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     Given("Chess engine instance")
     val piece = Piece("Bishop", Player1(), BishopEngine())
     When("I invoke isValidateMove for Bishop")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(5), RowTo(5)))
+    val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(5), RowTo(5)))
     Then("The movement is ok")
     assert(result.isSuccess)
   }
@@ -41,7 +41,7 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     Given("Chess engine instance")
     val piece = Piece("Bishop", Player1(), BishopEngine())
     When("I invoke isValidateMove for Bishop")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(5), RowFrom(5), ColumnTo(2), RowTo(2)))
+    val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(5), RowFrom(5), ColumnTo(2), RowTo(2)))
     Then("The movement is ok")
     assert(result.isSuccess)
   }
@@ -50,7 +50,7 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     Given("Chess engine instance")
     val piece = Piece("Bishop", Player1(), BishopEngine())
     When("I invoke isValidateMove for Bishop")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(3), RowTo(4)))
+    val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(3), RowTo(4)))
     Then("The movement is wrong")
     assert(result.isFailure)
   }
@@ -59,7 +59,7 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     Given("Chess engine instance")
     val piece = Piece("Bishop", Player1(), BishopEngine())
     When("I invoke isValidateMove for Bishop")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(5), RowFrom(5), ColumnTo(3), RowTo(4)))
+    val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(5), RowFrom(5), ColumnTo(3), RowTo(4)))
     Then("The movement is wrong")
     assert(result.isFailure)
   }
@@ -74,7 +74,7 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     val piece = Piece("Bishop", Player1(), BishopEngine())
     ChessBoard.board(2)(2) = Some(Piece("pawn", Player2(), PawnEngine()))
     When("I invoke isValidateMove for Bishop")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(3), RowTo(3)))
+    val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(3), RowTo(3)))
     Then("The movement is wrong")
     assert(result.isFailure)
   }
@@ -85,7 +85,7 @@ class ChessEngineBishopSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     ChessBoard.board(1)(3) = None
     ChessBoard.board(2)(3) = Some(Piece("pawn", Player2(), PawnEngine()))
     When("I invoke isValidateMove for Bishop")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(2), RowFrom(0), ColumnTo(4), RowTo(2)))
+    val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(2), RowFrom(0), ColumnTo(4), RowTo(2)))
     Then("The movement is wrong")
     assert(result.isSuccess)
   }

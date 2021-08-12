@@ -22,7 +22,7 @@ class ChessEnginePawnSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     Given("Chess engine instance")
     val piece = Piece("Pawn",Player1(), PawnEngine())
     When("I invoke isValidateMove for Pawn")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(2)))
+    val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(2)))
     Then("The movement is ok")
     assert(result.isSuccess)
   }
@@ -31,7 +31,7 @@ class ChessEnginePawnSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     Given("Chess engine instance")
     val piece = Piece("Pawn",Player1(), PawnEngine())
     When("I invoke isValidateMove for Pawn")
-    val result = piece.valid(Movement(Player2(), 2, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(3)))
+    val result = piece.isValid(Movement(Player2(), 2, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(3)))
     Then("The movement is ok")
     assert(result.isSuccess)
   }
@@ -40,7 +40,7 @@ class ChessEnginePawnSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     Given("Chess engine instance")
     val piece = Piece("Pawn", Player1(),PawnEngine())
     When("I invoke isValidateMove for Pawn")
-    val result = piece.valid(Movement(Player1(), 10, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(3)))
+    val result = piece.isValid(Movement(Player1(), 10, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(3)))
     Then("The movement is wrong")
     assert(result.isFailure)
   }
@@ -49,7 +49,7 @@ class ChessEnginePawnSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     Given("Chess engine instance")
     val piece = Piece("Pawn",Player1(), PawnEngine())
     When("I invoke isValidateMove for Pawn")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(2), RowTo(2)))
+    val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(2), RowTo(2)))
     Then("The movement is wrong")
     assert(result.isFailure)
   }
@@ -63,7 +63,7 @@ class ChessEnginePawnSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     val piece = Piece("Pawn",Player1(), PawnEngine())
     ChessBoard.board(2)(1) = Some(Piece("pawn",Player2(), PawnEngine()))
     When("I invoke isValidateMove for Pawn")
-    val result = piece.valid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(2)))
+    val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(1), RowTo(2)))
     Then("The movement is wrong")
     assert(result.isFailure)
   }
