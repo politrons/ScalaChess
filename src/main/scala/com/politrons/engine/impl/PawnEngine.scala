@@ -4,6 +4,7 @@ import com.politrons.engine.PieceEngine
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.Movement
 import com.politrons.model.Piece
+import com.politrons.rules.PathRules.oneForwardAndDiagonalPath
 import com.politrons.view.ChessBoard
 
 import scala.util.{Failure, Success, Try}
@@ -33,17 +34,23 @@ case class PawnEngine() extends PieceEngine {
    * Rule: There's no pieces during the path of the pawn until reach the spot.
    */
   private def isValidPathRule(movement: Movement): Boolean = {
-    (movement.rowFrom.value + 1 to movement.rowTo.value).count(row => {
-      ChessBoard.board(row)(movement.columnTo.value).isDefined
-    }) == 0
+    val (_: Int, horizontal: Int) = diffMovements(movement)
+    oneForwardAndDiagonalPath(horizontal, movement)
   }
+
+
+
 
   override def isCheck(movement: Movement): Try[Boolean] = Success(false)
 
   private def diagonalMoveWithOpponentPieceInDestination(movement: Movement,
                                                          horizontal: Int,
                                                          vertical: Int,
-                                                         destinationPiece: Option[Piece]) = {
+                                                         destinationPiece: Option[Piece]): Boolean = {
     horizontal == 1 && vertical == 1 && destinationPiece.isDefined && destinationPiece.get.player != movement.player
+  }
+
+  private def incDecColumn(movement: Movement, column: Int): Int = {
+    if (movement.columnFrom.value > movement.columnTo.value) column - 1 else column + 1
   }
 }

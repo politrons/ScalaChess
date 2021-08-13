@@ -46,6 +46,38 @@ object PathRules {
   }
 
   /**
+   * Rule to check that no piece are forward or in diagonal that is not mine
+   */
+  def oneForwardAndDiagonalPath(horizontal: Int, movement: Movement): Boolean = {
+    val result = if (horizontal > 0) {
+      var column = movement.columnTo.value
+      val diagonalResult = if (movement.rowFrom.value > movement.rowTo.value) {
+        (movement.rowFrom.value - 1 until movement.rowTo.value by -1).count(row => {
+          column = incDecColumn(movement, column)
+          ChessBoard.board(row)(column).isDefined
+        }) == 0
+      } else {
+        (movement.rowFrom.value + 1 until movement.rowTo.value).count(row => {
+          column = incDecColumn(movement, column)
+          ChessBoard.board(row)(movement.columnTo.value).isDefined
+        }) == 0
+      }
+      diagonalResult && destinationMovementNoPieceOfMine(movement)
+    } else {
+      if (movement.rowFrom.value > movement.rowTo.value) {
+        (movement.rowFrom.value - 1 to movement.rowTo.value by -1).count(row => {
+          ChessBoard.board(row)(movement.columnTo.value).isDefined
+        }) == 0
+      } else {
+        (movement.rowFrom.value + 1 to movement.rowTo.value).count(row => {
+          ChessBoard.board(row)(movement.columnTo.value).isDefined
+        }) == 0
+      }
+    }
+    result
+  }
+
+  /**
    * Rule:Check that the destination spot is empty or there is not a piece of mine.
    */
   private def destinationMovementNoPieceOfMine(movement: Movement): Boolean = {

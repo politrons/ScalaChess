@@ -1,5 +1,6 @@
 package com.politrons.app
 
+import com.politrons.model.ChessDomain.Player1
 import com.politrons.utils.BoardMock
 import com.politrons.view.ChessBoard
 import org.scalatest.funsuite.AnyFunSuite
@@ -44,6 +45,16 @@ class ChessAppSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterEac
     When("I run the chess game")
     Then("The game end with a checkmate")
     assert(ChessBoard.inCheckMessage == "Player 2 in Check")
+  }
+
+  test("Player1 eat pawn of player2") {
+    Given("Chess App running")
+    ChessApp.main(Array("/pawn-moves.txt", "10"))
+    When("I run the chess game")
+    Then("The player1 pawn is on player2 spot")
+    val maybePlayer1Pawn = ChessBoard.board(4)(4)
+    assert(maybePlayer1Pawn.isDefined)
+    assert(maybePlayer1Pawn.get.name.trim == "Pawn")
   }
 
 }
