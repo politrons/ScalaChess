@@ -1,10 +1,11 @@
 package com.politrons.engine.impl
 
 import com.politrons.engine.PieceEngine
-import com.politrons.engine.impl.PathRules.horizontalOrVerticalPathRule
+import com.politrons.rules.PathRules.horizontalOrVerticalPathRule
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.Movement
 import com.politrons.model.Piece
+import com.politrons.rules.CheckRules.horizontalVerticalCheck
 import com.politrons.view.ChessBoard
 
 import scala.util.{Failure, Success, Try}
@@ -44,30 +45,9 @@ case class RookEngine() extends PieceEngine {
    * Function that check if in the horizontal or vertical path the first piece found is a King of the opponent.
    */
   override def isCheck(movement: Movement): Try[Boolean] = {
-    Try {
-      val definedVerticalRight = getKingInCleanPath(movement.rowTo.value + 1, 7, 1, movement)
-      val definedVerticalLeft = getKingInCleanPath(movement.rowTo.value - 1, 0, -1, movement)
-
-      val definedHorizontalRight = getKingInCleanPath(movement.columnTo.value + 1, 7, 1, movement)
-      val definedHorizontalLeft = getKingInCleanPath(movement.columnTo.value - 1, 0, -1, movement)
-
-      definedHorizontalRight.isDefined ||
-        definedHorizontalLeft.isDefined ||
-        definedVerticalRight.isDefined ||
-        definedVerticalLeft.isDefined
-    }
+    horizontalVerticalCheck(movement)
   }
 
-  /**
-   * Function to check if the first defined piece in the path is a King
-   */
-  def getKingInCleanPath(from: Int, to: Int, IncDec: Int, movement: Movement): Option[Piece] = {
-    (from to to by IncDec)
-      .flatMap(row => ChessBoard.board(row)(movement.columnFrom.value))
-      .take(1)
-      .find(piece =>
-        piece.player != movement.player &&
-          piece.name.trim.toLowerCase() == "king")
-  }
+
 
 }

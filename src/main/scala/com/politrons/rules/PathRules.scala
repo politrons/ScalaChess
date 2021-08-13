@@ -1,4 +1,4 @@
-package com.politrons.engine.impl
+package com.politrons.rules
 
 import com.politrons.model.ChessDomain.Movement
 import com.politrons.view.ChessBoard
