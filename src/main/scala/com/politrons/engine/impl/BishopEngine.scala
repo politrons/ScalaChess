@@ -4,6 +4,7 @@ import com.politrons.engine.PieceEngine
 import com.politrons.engine.impl.PathRules.diagonalPathRule
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.Movement
+import com.politrons.model.Piece
 import com.politrons.view.ChessBoard
 
 import scala.util.{Failure, Success, Try}
@@ -46,72 +47,40 @@ case class BishopEngine() extends PieceEngine {
       val currentRow = movement.rowTo.value
       var currentColumn = movement.columnTo.value
       //Row ++  Column --
-      val definedRowPlusColumnLess = (currentRow + 1 to 7 by 1)
-        .flatMap(row => {
-          currentColumn -= 1
-          if (currentColumn >= 0) {
-            ChessBoard.board(row)(currentColumn)
-          } else {
-            None
-          }
-        })
-        .take(1)
-        .find(piece =>
-          piece.player != movement.player &&
-            piece.name.trim.toLowerCase() == "king")
-
+      val definedRowPlusColumnLess = searchKingInDiagonal(movement, currentRow + 1, 7, 1, column => column - 1)
       //Row -- Column --
-      currentColumn = movement.columnTo.value
-      val definedRowLessColumnLess = (currentRow - 1 to 0 by -1)
-        .flatMap(row => {
-          currentColumn -= 1
-          if (currentColumn >= 0) {
-            ChessBoard.board(row)(currentColumn)
-          } else {
-            None
-          }
-        })
-        .take(1)
-        .find(piece =>
-          piece.player != movement.player &&
-            piece.name.trim.toLowerCase() == "king")
-
+      val definedRowLessColumnLess = searchKingInDiagonal(movement, currentRow - 1, 0, -1, column => column - 1)
       //Row ++ Column ++
-      currentColumn = movement.columnTo.value
-      val definedRowPlusColumnPlus = (currentRow + 1 to 7 by 1)
-        .flatMap(row => {
-          currentColumn += 1
-          if (currentColumn <= 7) {
-            ChessBoard.board(row)(currentColumn)
-          } else {
-            None
-          }
-        })
-        .take(1)
-        .find(piece =>
-          piece.player != movement.player &&
-            piece.name.trim.toLowerCase() == "king")
-
+      val definedRowPlusColumnPlus = searchKingInDiagonal(movement, currentRow + 1, 7, 1, column => column + 1)
       //Row -- Column ++
       currentColumn = movement.columnTo.value
-      val definedRowLessColumnPlus = (currentRow - 1 to 0 by -1)
-        .flatMap(row => {
-          currentColumn += 1
-          if (currentColumn <= 7) {
-            ChessBoard.board(row)(currentColumn)
-          } else {
-            None
-          }
-        })
-        .take(1)
-        .find(piece =>
-          piece.player != movement.player &&
-            piece.name.trim.toLowerCase() == "king")
+      val definedRowLessColumnPlus = searchKingInDiagonal(movement, currentRow - 1, 0, -1, column => column + 1)
 
       definedRowPlusColumnLess.isDefined ||
         definedRowLessColumnLess.isDefined ||
         definedRowPlusColumnPlus.isDefined ||
         definedRowLessColumnPlus.isDefined
     }
+  }
+
+  def searchKingInDiagonal(movement: Movement,
+                           from: Int,
+                           to: Int,
+                           incDec: Int,
+                           incDecColumnFunc: Int => Int): Option[Piece] = {
+    var currentColumn = movement.columnTo.value
+    (from to to by incDec)
+      .flatMap(row => {
+        currentColumn = incDecColumnFunc(currentColumn)
+        if (currentColumn >= 0 && currentColumn <= 7) {
+          ChessBoard.board(row)(currentColumn)
+        } else {
+          None
+        }
+      })
+      .take(1)
+      .find(piece =>
+        piece.player != movement.player &&
+          piece.name.trim.toLowerCase() == "king")
   }
 }
