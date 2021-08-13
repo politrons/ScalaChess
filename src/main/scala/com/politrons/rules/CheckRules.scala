@@ -6,6 +6,9 @@ import com.politrons.view.ChessBoard
 
 import scala.util.Try
 
+/**
+ * Generic check rules used for multiple [PieceEngines]
+ */
 object CheckRules {
 
   /**

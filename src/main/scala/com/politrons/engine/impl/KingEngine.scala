@@ -1,10 +1,9 @@
 package com.politrons.engine.impl
 
 import com.politrons.engine.PieceEngine
-import com.politrons.rules.PathRules.{diagonalPathRule, horizontalOrVerticalPathRule}
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.Movement
-import com.politrons.view.ChessBoard
+import com.politrons.rules.PathRules.{diagonalPathRule, horizontalOrVerticalPathRule}
 
 import scala.util.{Failure, Success, Try}
 
