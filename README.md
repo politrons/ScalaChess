@@ -52,3 +52,18 @@ one by one committing every scenario to have a quick feedback about your program
 * **Integration**: I also use scalatest to run the main class ```ChessApp``` together with some movement files to test the end to end of the application,
     and prove different real game scenarios
 
+## Makefile
+
+To being able to build and run this project, it will require you have `````sbt````` installed.
+
+I create a **Makefile** to add all the option to interact with the platform:
+
+* **clean:** Clean all the resources in the target folder.
+* **test** Run all the testing pyramid
+* **build:** Build the jar using assembly.
+* **run-game:** Run the chess game passing a path where we have a file with the chess movements, and the
+    chess clock to wait between each player movement
+
+````
+Makefile clean|build|run-conversion|run-currency-exchange|test-request
+````

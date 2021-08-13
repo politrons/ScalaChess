@@ -5,6 +5,7 @@ import com.politrons.model.ChessDomain._
 import com.politrons.view.ChessBoard
 import com.whitehatgaming.UserInputFile
 
+import java.nio.file.Paths
 import scala.annotation.tailrec
 import scala.util.{Failure, Success, Try}
 
@@ -16,8 +17,10 @@ object ChessApp {
 
   def main(args: Array[String]): Unit = {
     val fileName = args(0)
+    println(s"Path of Chess game movements $fileName")
     chessClock = args(1).toInt
-    path = getClass.getResource(fileName).getPath
+    println(s"Chess clock for the game $chessClock")
+    path = Paths.get(fileName).toString
     inputFile = new UserInputFile(path)
     runPlayerMovement(Player1(), 1)
   }
