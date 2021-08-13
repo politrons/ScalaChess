@@ -29,5 +29,8 @@ case class KnightEngine() extends PieceEngine {
       (horizontal == 1 && vertical == 2)
   }
 
-  override def isCheck(movement: Movement): Try[Boolean] = Success(false)
+  override def isCheck(movement: Movement): Try[Boolean] = {
+
+    Success(false)
+  }
 }

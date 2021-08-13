@@ -3,6 +3,7 @@ package com.politrons.engine.impl
 import com.politrons.engine.PieceEngine
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.Movement
+import com.politrons.model.Piece
 import com.politrons.view.ChessBoard
 
 import scala.util.{Failure, Success, Try}
@@ -22,8 +23,10 @@ case class PawnEngine() extends PieceEngine {
 
   private def isValidMovementRule(movement: Movement): Boolean = {
     val (vertical: Int, horizontal: Int) = diffMovements(movement)
-    (horizontal == 0 && vertical == 1) ||
-      (horizontal == 0 && vertical == 2) && (movement.number <= 2)
+    val destinationPiece = ChessBoard.board(movement.rowTo.value)(movement.columnTo.value)
+    diagonalMoveWithOpponentPieceInDestination(movement, horizontal, vertical, destinationPiece) ||
+      (horizontal == 0 && vertical == 1) ||
+      ((horizontal == 0 && vertical == 2) && (movement.number <= 2))
   }
 
   /**
@@ -36,4 +39,11 @@ case class PawnEngine() extends PieceEngine {
   }
 
   override def isCheck(movement: Movement): Try[Boolean] = Success(false)
+
+  private def diagonalMoveWithOpponentPieceInDestination(movement: Movement,
+                                                         horizontal: Int,
+                                                         vertical: Int,
+                                                         destinationPiece: Option[Piece]) = {
+    horizontal == 1 && vertical == 1 && destinationPiece.isDefined && destinationPiece.get.player != movement.player
+  }
 }
