@@ -38,9 +38,6 @@ case class PawnEngine() extends PieceEngine {
     oneForwardAndDiagonalPath(horizontal, movement)
   }
 
-
-
-
   override def isCheck(movement: Movement): Try[Boolean] = Success(false)
 
   private def diagonalMoveWithOpponentPieceInDestination(movement: Movement,
@@ -50,7 +47,4 @@ case class PawnEngine() extends PieceEngine {
     horizontal == 1 && vertical == 1 && destinationPiece.isDefined && destinationPiece.get.player != movement.player
   }
 
-  private def incDecColumn(movement: Movement, column: Int): Int = {
-    if (movement.columnFrom.value > movement.columnTo.value) column - 1 else column + 1
-  }
 }

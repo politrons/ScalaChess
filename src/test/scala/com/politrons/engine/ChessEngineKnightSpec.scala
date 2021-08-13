@@ -1,6 +1,6 @@
 package com.politrons.engine
 
-import com.politrons.engine.impl.KnightEngine
+import com.politrons.engine.impl.{BishopEngine, KnightEngine}
 import com.politrons.model.ChessDomain._
 import com.politrons.model.Piece
 import com.politrons.utils.BoardMock
@@ -57,6 +57,46 @@ class ChessEngineKnightSpec extends AnyFunSuite with GivenWhenThen with BeforeAn
     val result = piece.isValid(Movement(Player1(), 1, ColumnFrom(1), RowFrom(1), ColumnTo(3), RowTo(1)))
     Then("The movement is wrong")
     assert(result.isFailure)
+  }
+
+  /**
+   * CHECK RULES
+   * ------------
+   */
+  test("Knight check rule, knight is in 4,2") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("knight",Player2(), KnightEngine())
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(4), RowTo(2))
+    ChessBoard.board(2)(4) = Some(piece)
+    When("I invoke isCheck for Knight")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
+  }
+
+  test("Knight check rule, knight is in 2,2") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("knight",Player2(), KnightEngine())
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(2), RowTo(2))
+    ChessBoard.board(2)(2) = Some(piece)
+    When("I invoke isCheck for Knight")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
+  }
+
+  test("Knight check rule, knight is in 1,5") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("knight",Player2(), KnightEngine())
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(5), RowTo(1))
+    ChessBoard.board(1)(5) = Some(piece)
+    When("I invoke isCheck for Knight")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
   }
 
 }

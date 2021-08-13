@@ -1,6 +1,6 @@
 package com.politrons.rules
 
-import com.politrons.model.ChessDomain.Movement
+import com.politrons.model.ChessDomain.{Movement, Player}
 import com.politrons.model.Piece
 import com.politrons.view.ChessBoard
 
@@ -39,7 +39,7 @@ object CheckRules {
   /**
    * Rule Check: Go in horizontal and vertical directions to try to find the first piece in the path as King.
    */
-   def horizontalVerticalCheck(movement: Movement): Try[Boolean] = {
+  def horizontalVerticalCheck(movement: Movement): Try[Boolean] = {
     Try {
       val definedVerticalRight = getKingInCleanPath(movement.rowTo.value + 1, 7, 1, movement)
       val definedVerticalLeft = getKingInCleanPath(movement.rowTo.value - 1, 0, -1, movement)
@@ -64,6 +64,37 @@ object CheckRules {
       .find(piece =>
         piece.player != movement.player &&
           piece.name.trim.toLowerCase() == "king")
+  }
+
+  /**
+   * Check Rule: check if the King is in all possible 8 movements of the current Knight position.
+   */
+  def knightCheckRule(movement: Movement): Try[Boolean] = {
+    Try {
+      val row = movement.rowTo.value
+      val column = movement.columnTo.value
+      findKingInKnightMovement(row - 1, column - 2, movement.player) ||
+        findKingInKnightMovement(row - 1, column + 2, movement.player) ||
+        findKingInKnightMovement(row + 1, column - 2, movement.player) ||
+        findKingInKnightMovement(row + 1, column + 2, movement.player) ||
+        findKingInKnightMovement(row + 2, column - 1, movement.player) ||
+        findKingInKnightMovement(row + 2, column + 1, movement.player) ||
+        findKingInKnightMovement(row - 2, column - 1, movement.player) ||
+        findKingInKnightMovement(row - 2, column + 1, movement.player)
+    }
+  }
+
+  def findKingInKnightMovement(row: Int,
+                               column: Int,
+                               player: Player): Boolean = {
+    if ((row >= 0) && column >= 0) {
+      val maybePiece = ChessBoard.board(row)(column)
+      maybePiece.isDefined &&
+        maybePiece.get.player != player &&
+        (maybePiece.get.name.trim.toLowerCase() == "king")
+    } else {
+      false
+    }
   }
 
   private def searchKingInDiagonal(movement: Movement,
