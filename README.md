@@ -65,5 +65,5 @@ I create a **Makefile** to add all the option to interact with the platform:
     chess clock to wait between each player movement
 
 ````
-Makefile clean|build|run-conversion|run-currency-exchange|test-request
+Makefile clean|test|build|run-game
 ````
