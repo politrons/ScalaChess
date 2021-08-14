@@ -11,21 +11,24 @@ object ChessBoard {
 
   private val logo: String =
     """
-      |闩ㄩセㄖ ⼕卄🝗丂丂
+      |Ⓢⓒⓐⓛⓐ Ⓒⓗⓔⓢⓢ̳  
       |""".stripMargin
 
   private var player1Movements = 0
   private var player2Movements = 0
 
-  var inCheckMessage = ""
+  var inCheckMessage = "                 "
 
   /**
    * Prints current board state to the console in the ASCII mnemonic format
    */
-  def printBoard(player: Player, isCheck: Boolean): Unit = {
+  def printGameInfo(player: Player, isCheck: Boolean): Unit = {
     increasePlayerMovement(player)
     inCheckMessage = createInCheckMessage(player, isCheck)
+    printBoard()
+  }
 
+  def printBoard(): Unit = {
     val filesRow = """     A       B        C        D        E        F        G        H       """
     val separator = """+-------+--------+--------+--------+--------+--------+--------+--------+  """
     println(logo)

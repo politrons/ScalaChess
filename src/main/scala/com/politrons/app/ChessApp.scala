@@ -17,9 +17,10 @@ object ChessApp {
 
   def main(args: Array[String]): Unit = {
     val fileName = args(0)
-    println(s"Path of Chess game movements $fileName")
+    println(s"Path of Chess game movements: $fileName")
     chessClock = args(1).toInt
-    println(s"Chess clock for the game $chessClock")
+    println(s"Chess clock for the game: $chessClock ms")
+    ChessBoard.printBoard()
     path = Paths.get(fileName).toString
     inputFile = new UserInputFile(path)
     runPlayerMovement(Player1(), 1)
@@ -57,7 +58,7 @@ object ChessApp {
    */
   private def movePieceInBoard(movement: Movement): Try[Unit] = {
     ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) match {
-      case maybePiece@Some(piece) =>
+      case maybePiece@Some(piece) if piece.player == movement.player =>
         piece.isValid(movement) match {
           case Success(_) =>
             ChessBoard.board(movement.rowTo.value)(movement.columnTo.value) = maybePiece
@@ -71,11 +72,14 @@ object ChessApp {
                 false
             }
 
-            ChessBoard.printBoard(movement.player, isCheck)
+            ChessBoard.printGameInfo(movement.player, isCheck)
             Thread.sleep(chessClock)
             Success()
           case Failure(t) => Failure(t)
         }
+      case Some(piece) if piece.player != movement.player =>
+        val errorMessage = s"Invalid movement. ${piece.name} does not belong to player ${movement.player}"
+        Failure(IllegalMovementException(errorMessage))
       case None =>
         val errorMessage = s"Invalid movement. Piece does not exist in position ${movement.rowFrom.value}-${movement.columnFrom.value}"
         Failure(IllegalMovementException(errorMessage))
