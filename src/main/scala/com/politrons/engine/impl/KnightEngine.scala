@@ -3,7 +3,7 @@ package com.politrons.engine.impl
 import com.politrons.engine.PieceEngine
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.{Movement, Player}
-import com.politrons.rules.CheckRules.knightCheckRule
+import com.politrons.rules.CheckRules.knightCheck
 import com.politrons.rules.PathRules.{destinationMovementNoPieceOfMine, diagonalPathRule, horizontalOrVerticalPathRule}
 import com.politrons.view.ChessBoard
 
@@ -41,7 +41,7 @@ case class KnightEngine() extends PieceEngine {
    * Check Rule: check if the King is in all possible 8 movements of the current Knight position.
    */
   override def isCheck(movement: Movement): Try[Boolean] = {
-    knightCheckRule(movement)
+    knightCheck(movement)
   }
 
 }

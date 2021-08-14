@@ -67,27 +67,9 @@ object CheckRules {
   }
 
   /**
-   * Check Rule:  to check if the first defined piece in the path is a King for vertical movements
-   */
-  def getKingInCleanPath(from: Int,
-                         to: Int,
-                         IncDec: Int,
-                         movement: Movement,
-                         extractFunc: (Int, Movement) => Option[Piece]
-                        ): Option[Piece] = {
-    (from to to by IncDec)
-      .flatMap(x => extractFunc(x, movement))
-      .take(1)
-      .find(piece =>
-        piece.player != movement.player &&
-          piece.name.trim.toLowerCase() == "king")
-  }
-
-
-  /**
    * Check Rule: check if the King is in all possible 8 movements of the current Knight position.
    */
-  def knightCheckRule(movement: Movement): Try[Boolean] = {
+  def knightCheck(movement: Movement): Try[Boolean] = {
     Try {
       val row = movement.rowTo.value
       val column = movement.columnTo.value
@@ -102,7 +84,7 @@ object CheckRules {
     }
   }
 
-  def findKingInKnightMovement(row: Int,
+  private def findKingInKnightMovement(row: Int,
                                column: Int,
                                player: Player): Boolean = {
     if ((row >= 0) && column >= 0) {
@@ -115,7 +97,25 @@ object CheckRules {
     }
   }
 
-  def findKingInDiagonal(movement: Movement,
+  /**
+   * Check Rule:  to check if the first defined piece in the path is a King for vertical movements
+   */
+  private def getKingInCleanPath(from: Int,
+                                 to: Int,
+                                 IncDec: Int,
+                                 movement: Movement,
+                                 extractFunc: (Int, Movement) => Option[Piece]
+                                ): Option[Piece] = {
+    (from to to by IncDec)
+      .flatMap(x => extractFunc(x, movement))
+      .take(1)
+      .find(piece =>
+        piece.player != movement.player &&
+          piece.name.trim.toLowerCase() == "king")
+  }
+
+
+  private def findKingInDiagonal(movement: Movement,
                          from: Int,
                          to: Int,
                          incDec: Int,
