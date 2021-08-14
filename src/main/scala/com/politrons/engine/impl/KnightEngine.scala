@@ -4,6 +4,7 @@ import com.politrons.engine.PieceEngine
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.{Movement, Player}
 import com.politrons.rules.CheckRules.knightCheckRule
+import com.politrons.rules.PathRules.{destinationMovementNoPieceOfMine, diagonalPathRule, horizontalOrVerticalPathRule}
 import com.politrons.view.ChessBoard
 
 import scala.util.{Failure, Success, Try}
@@ -17,6 +18,7 @@ case class KnightEngine() extends PieceEngine {
     for {
       _ <- if (isValidNextMove(movement)) Success() else Failure(IllegalMovementException(s"Error validating $movement"))
       _ <- if (isValidMovementRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Knight $movement"))
+      _ <- if (isValidPathRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Knight path $movement"))
       _ <- inCheck(movement)
     } yield ()
   }
@@ -29,6 +31,10 @@ case class KnightEngine() extends PieceEngine {
     val (horizontal: Int, vertical: Int) = diffMovements(movement)
     (horizontal == 2 && vertical == 1) ||
       (horizontal == 1 && vertical == 2)
+  }
+
+  private def isValidPathRule(movement: Movement): Boolean = {
+    destinationMovementNoPieceOfMine(movement)
   }
 
   /**

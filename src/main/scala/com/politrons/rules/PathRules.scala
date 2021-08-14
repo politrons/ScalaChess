@@ -80,7 +80,7 @@ object PathRules {
   /**
    * Rule:Check that the destination spot is empty or there is not a piece of mine.
    */
-  private def destinationMovementNoPieceOfMine(movement: Movement): Boolean = {
+  def destinationMovementNoPieceOfMine(movement: Movement): Boolean = {
     ChessBoard.board(movement.rowTo.value)(movement.columnTo.value) match {
       case Some(piece) => piece.player != movement.player
       case None => true

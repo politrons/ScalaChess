@@ -17,8 +17,10 @@ trait PieceEngine {
   def isCheck(movement: Movement): Try[Boolean]
 
   def inCheck(movement: Movement): Try[Unit] = {
-    val maybePiece = ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value)
+    val maybePieceFrom = ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value)
+    val maybePieceTo = ChessBoard.board(movement.rowTo.value)(movement.columnTo.value)
     ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) = None
+    ChessBoard.board(movement.rowTo.value)(movement.columnTo.value) = maybePieceFrom
     val triedUnit = Try {
       movement.player match {
         case Player1() =>
@@ -28,7 +30,7 @@ trait PieceEngine {
                 case Some(piece) if piece.player == Player2() =>
                   val opponentMovement = Movement(Player2(), 0, ColumnFrom(0), RowFrom(0), ColumnTo(column), RowTo(row))
                   piece.isCheck(opponentMovement) match {
-                    case Success(isCheck) if isCheck => throw IllegalMovementException(s"Illegal move, since it let the King in Check by $movement")
+                    case Success(isCheck) if isCheck => throw IllegalMovementException(s"Illegal move of ${maybePieceFrom.get.name}, since it let the King in Check by $movement")
                     case _ => ()
                   }
                 case _ => ()
@@ -42,7 +44,7 @@ trait PieceEngine {
                 case Some(piece) if piece.player == Player1() =>
                   val opponentMovement = Movement(Player1(), 0, ColumnFrom(0), RowFrom(0), ColumnTo(column), RowTo(row))
                   piece.isCheck(opponentMovement) match {
-                    case Success(isCheck) if isCheck => throw IllegalMovementException(s"Illegal move, since it let the King in Check by $movement")
+                    case Success(isCheck) if isCheck => throw IllegalMovementException(s"Illegal move of ${maybePieceFrom.get.name}, since it let the King in Check by $movement")
                     case _ => ()
                   }
                 case _ => ()
@@ -51,7 +53,8 @@ trait PieceEngine {
           }
       }
     }
-    ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) = maybePiece
+    ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) = maybePieceFrom
+    ChessBoard.board(movement.rowTo.value)(movement.columnTo.value) = maybePieceTo
     triedUnit
   }
 
