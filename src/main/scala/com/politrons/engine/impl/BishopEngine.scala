@@ -43,7 +43,7 @@ case class BishopEngine() extends PieceEngine {
    * If that piece is a King is consider a Check.
    */
   override def isCheck(movement: Movement): Try[Boolean] = {
-    diagonalCheck(movement)
+    diagonalCheck(movement,7,0)
   }
 
 

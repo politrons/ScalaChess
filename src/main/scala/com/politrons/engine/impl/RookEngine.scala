@@ -46,9 +46,8 @@ case class RookEngine() extends PieceEngine {
    * Function that check if in the horizontal or vertical path the first piece found is a King of the opponent.
    */
   override def isCheck(movement: Movement): Try[Boolean] = {
-    horizontalVerticalCheck(movement)
+    horizontalVerticalCheck(movement, 7, 0,7,0)
   }
-
 
 
 }

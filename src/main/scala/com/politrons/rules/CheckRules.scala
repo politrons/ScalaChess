@@ -15,19 +15,21 @@ object CheckRules {
    * Rule Check: Go in all possible diagonals, and just obtain the first defined piece in the path.
    * If that piece is a King is consider a Check.
    */
-  def diagonalCheck(movement: Movement): Try[Boolean] = {
+  def diagonalCheck(movement: Movement,
+                    toInc: Int,
+                    toDec: Int): Try[Boolean] = {
     Try {
       val currentRow = movement.rowTo.value
       var currentColumn = movement.columnTo.value
       //Row ++  Column --
-      val definedRowPlusColumnLess = findKingInDiagonal(movement, currentRow + 1, 7, 1, column => column - 1)
+      val definedRowPlusColumnLess = findKingInDiagonal(movement, currentRow + 1, toInc, 1, column => column - 1)
       //Row -- Column --
-      val definedRowLessColumnLess = findKingInDiagonal(movement, currentRow - 1, 0, -1, column => column - 1)
+      val definedRowLessColumnLess = findKingInDiagonal(movement, currentRow - 1, toDec, -1, column => column - 1)
       //Row ++ Column ++
-      val definedRowPlusColumnPlus = findKingInDiagonal(movement, currentRow + 1, 7, 1, column => column + 1)
+      val definedRowPlusColumnPlus = findKingInDiagonal(movement, currentRow + 1, toInc, 1, column => column + 1)
       //Row -- Column ++
       currentColumn = movement.columnTo.value
-      val definedRowLessColumnPlus = findKingInDiagonal(movement, currentRow - 1, 0, -1, column => column + 1)
+      val definedRowLessColumnPlus = findKingInDiagonal(movement, currentRow - 1, toDec, -1, column => column + 1)
 
       definedRowPlusColumnLess.isDefined ||
         definedRowLessColumnLess.isDefined ||
@@ -39,19 +41,23 @@ object CheckRules {
   /**
    * Rule Check: Go in horizontal and vertical directions to try to find the first piece in the path as King.
    */
-  def horizontalVerticalCheck(movement: Movement): Try[Boolean] = {
+  def horizontalVerticalCheck(movement: Movement,
+                              rowToInc: Int,
+                              rowToDec: Int,
+                              columnToInc: Int,
+                              columnToDec: Int): Try[Boolean] = {
     Try {
       val extractRowFunc: (Int, Movement) => Option[Piece] = (row, movement) => ChessBoard.board(row)(movement.columnTo.value)
       val definedVerticalRight =
-        getKingInCleanPath(movement.rowTo.value + 1, 7, 1, movement, extractRowFunc)
+        getKingInCleanPath(movement.rowTo.value + 1, rowToInc, 1, movement, extractRowFunc)
       val definedVerticalLeft =
-        getKingInCleanPath(movement.rowTo.value - 1, 0, -1, movement, extractRowFunc)
+        getKingInCleanPath(movement.rowTo.value - 1, rowToDec, -1, movement, extractRowFunc)
 
       val extractColumnFunc: (Int, Movement) => Option[Piece] = (column, movement) => ChessBoard.board(movement.columnTo.value)(column)
       val definedHorizontalRight =
-        getKingInCleanPath(movement.columnTo.value + 1, 7, 1, movement, extractColumnFunc)
+        getKingInCleanPath(movement.columnTo.value + 1, columnToInc, 1, movement, extractColumnFunc)
       val definedHorizontalLeft =
-        getKingInCleanPath(movement.columnTo.value - 1, 0, -1, movement, extractColumnFunc)
+        getKingInCleanPath(movement.columnTo.value - 1, columnToDec, -1, movement, extractColumnFunc)
 
       definedHorizontalRight.isDefined ||
         definedHorizontalLeft.isDefined ||
@@ -63,12 +69,12 @@ object CheckRules {
   /**
    * Check Rule:  to check if the first defined piece in the path is a King for vertical movements
    */
-  private def getKingInCleanPath(from: Int,
-                                 to: Int,
-                                 IncDec: Int,
-                                 movement: Movement,
-                                 extractFunc: (Int, Movement) => Option[Piece]
-                                ): Option[Piece] = {
+  def getKingInCleanPath(from: Int,
+                         to: Int,
+                         IncDec: Int,
+                         movement: Movement,
+                         extractFunc: (Int, Movement) => Option[Piece]
+                        ): Option[Piece] = {
     (from to to by IncDec)
       .flatMap(x => extractFunc(x, movement))
       .take(1)
@@ -109,11 +115,11 @@ object CheckRules {
     }
   }
 
-  private def findKingInDiagonal(movement: Movement,
-                                   from: Int,
-                                   to: Int,
-                                   incDec: Int,
-                                   incDecColumnFunc: Int => Int): Option[Piece] = {
+  def findKingInDiagonal(movement: Movement,
+                         from: Int,
+                         to: Int,
+                         incDec: Int,
+                         incDecColumnFunc: Int => Int): Option[Piece] = {
     var currentColumn = movement.columnTo.value
     (from to to by incDec)
       .flatMap(row => {

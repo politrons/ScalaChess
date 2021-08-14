@@ -42,6 +42,6 @@ case class QueenEngine() extends PieceEngine {
   }
 
   override def isCheck(movement: Movement): Try[Boolean] = {
-    Try( diagonalCheck(movement).get || horizontalVerticalCheck(movement).get)
+    Try(diagonalCheck(movement, 7, 0).get || horizontalVerticalCheck(movement, 7, 0, 7, 0).get)
   }
 }

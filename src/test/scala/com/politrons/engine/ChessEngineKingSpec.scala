@@ -1,6 +1,6 @@
 package com.politrons.engine
 
-import com.politrons.engine.impl.KingEngine
+import com.politrons.engine.impl.{BishopEngine, KingEngine}
 import com.politrons.model.ChessDomain._
 import com.politrons.model.Piece
 import com.politrons.utils.BoardMock
@@ -81,5 +81,44 @@ class ChessEngineKingSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     assert(result.isFailure)
   }
 
+  /**
+   * CHECK RULES
+   * ------------
+   */
+  test("King check rule, rook is in front of king with other piece in between") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("king",Player2(), KingEngine())
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(5), RowTo(2))
+    ChessBoard.board(2)(5) = Some(piece)
+    When("I invoke isCheck for King")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is not check")
+    assert(isCheck.isSuccess)
+    assert(!isCheck.get)
+  }
+
+  test("King check rule king diagonal") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("king",Player2(), KingEngine())
+    ChessBoard.board(1)(4) = Some(piece)
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(4), RowTo(1))
+    When("I invoke isCheck for King")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
+  }
+
+  test("King check rule king vertical") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("king",Player2(), KingEngine())
+    ChessBoard.board(1)(3) = Some(piece)
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(3), RowTo(1))
+    When("I invoke isCheck for King")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
+  }
 }
 

@@ -3,6 +3,7 @@ package com.politrons.engine.impl
 import com.politrons.engine.PieceEngine
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.Movement
+import com.politrons.rules.CheckRules.{diagonalCheck, horizontalVerticalCheck}
 import com.politrons.rules.PathRules.{diagonalPathRule, horizontalOrVerticalPathRule}
 
 import scala.util.{Failure, Success, Try}
@@ -41,5 +42,9 @@ case class KingEngine() extends PieceEngine {
     }
   }
 
-  override def isCheck(movement: Movement): Try[Boolean] = Success(false)
+  override def isCheck(movement: Movement): Try[Boolean] = {
+    val tryDiagonalCheck = diagonalCheck(movement, movement.rowTo.value + 1, movement.rowTo.value - 1)
+    val tryHorizontalVerticalCheck = horizontalVerticalCheck(movement, movement.rowTo.value + 1, movement.rowTo.value - 1, movement.columnTo.value + 1, movement.columnTo.value - 1)
+    Try(tryDiagonalCheck.get || tryHorizontalVerticalCheck.get)
+  }
 }
