@@ -17,6 +17,7 @@ case class KnightEngine() extends PieceEngine {
     for {
       _ <- if (isValidNextMove(movement)) Success() else Failure(IllegalMovementException(s"Error validating $movement"))
       _ <- if (isValidMovementRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Knight $movement"))
+      _ <- inCheck(movement)
     } yield ()
   }
 

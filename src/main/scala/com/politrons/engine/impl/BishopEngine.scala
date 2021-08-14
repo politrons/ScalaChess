@@ -1,12 +1,10 @@
 package com.politrons.engine.impl
 
 import com.politrons.engine.PieceEngine
-import com.politrons.rules.CheckRules.diagonalCheck
-import com.politrons.rules.PathRules.diagonalPathRule
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.Movement
-import com.politrons.model.Piece
-import com.politrons.view.ChessBoard
+import com.politrons.rules.CheckRules.diagonalCheck
+import com.politrons.rules.PathRules.diagonalPathRule
 
 import scala.util.{Failure, Success, Try}
 
@@ -20,6 +18,7 @@ case class BishopEngine() extends PieceEngine {
       _ <- if (isValidNextMove(movement)) Success() else Failure(IllegalMovementException(s"Error validating $movement"))
       _ <- if (isValidMovementRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Bishop $movement"))
       _ <- if (isValidPathRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Bishop path $movement"))
+      _ <- inCheck(movement)
     } yield ()
   }
 

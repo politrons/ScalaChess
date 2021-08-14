@@ -110,7 +110,7 @@ class ChessEngineRookSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     val piece = Piece("rook",Player2(), RookEngine())
     ChessBoard.board(1)(3) = None
     ChessBoard.board(4)(3) = Some(piece)
-    val movement = Movement(Player2(), 1, ColumnFrom(3), RowFrom(4), ColumnTo(2), RowTo(4))
+    val movement = Movement(Player2(), 1, ColumnFrom(3), RowFrom(4), ColumnTo(3), RowTo(4))
     When("I invoke isCheck for Rook")
     val isCheck = piece.isCheck(movement)
     Then("The movement is check")

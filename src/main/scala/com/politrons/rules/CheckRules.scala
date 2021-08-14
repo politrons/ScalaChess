@@ -41,11 +41,17 @@ object CheckRules {
    */
   def horizontalVerticalCheck(movement: Movement): Try[Boolean] = {
     Try {
-      val definedVerticalRight = getKingInCleanPath(movement.rowTo.value + 1, 7, 1, movement)
-      val definedVerticalLeft = getKingInCleanPath(movement.rowTo.value - 1, 0, -1, movement)
+      val extractRowFunc: (Int, Movement) => Option[Piece] = (row, movement) => ChessBoard.board(row)(movement.columnTo.value)
+      val definedVerticalRight =
+        getKingInCleanPath(movement.rowTo.value + 1, 7, 1, movement, extractRowFunc)
+      val definedVerticalLeft =
+        getKingInCleanPath(movement.rowTo.value - 1, 0, -1, movement, extractRowFunc)
 
-      val definedHorizontalRight = getKingInCleanPath(movement.columnTo.value + 1, 7, 1, movement)
-      val definedHorizontalLeft = getKingInCleanPath(movement.columnTo.value - 1, 0, -1, movement)
+      val extractColumnFunc: (Int, Movement) => Option[Piece] = (column, movement) => ChessBoard.board(movement.columnTo.value)(column)
+      val definedHorizontalRight =
+        getKingInCleanPath(movement.columnTo.value + 1, 7, 1, movement, extractColumnFunc)
+      val definedHorizontalLeft =
+        getKingInCleanPath(movement.columnTo.value - 1, 0, -1, movement, extractColumnFunc)
 
       definedHorizontalRight.isDefined ||
         definedHorizontalLeft.isDefined ||
@@ -55,16 +61,22 @@ object CheckRules {
   }
 
   /**
-   * Check Rule:  to check if the first defined piece in the path is a King
+   * Check Rule:  to check if the first defined piece in the path is a King for vertical movements
    */
-  private def getKingInCleanPath(from: Int, to: Int, IncDec: Int, movement: Movement): Option[Piece] = {
+  private def getKingInCleanPath(from: Int,
+                                 to: Int,
+                                 IncDec: Int,
+                                 movement: Movement,
+                                 extractFunc: (Int, Movement) => Option[Piece]
+                                ): Option[Piece] = {
     (from to to by IncDec)
-      .flatMap(row => ChessBoard.board(row)(movement.columnFrom.value))
+      .flatMap(x => extractFunc(x, movement))
       .take(1)
       .find(piece =>
         piece.player != movement.player &&
           piece.name.trim.toLowerCase() == "king")
   }
+
 
   /**
    * Check Rule: check if the King is in all possible 8 movements of the current Knight position.

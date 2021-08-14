@@ -56,5 +56,23 @@ class ChessAppSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterEac
     assert(maybePlayer1Pawn.get.name.trim == "Pawn")
   }
 
+  test("Player1 make a wrong move that provoke a Chess of Bishop") {
+    Given("Chess App running")
+    ChessApp.main(Array("src/test/resources/invalid-check-move/in-check-invalid-bishop.txt", "10"))
+    When("I run the chess game")
+    Then("The player1 made a wrong move")
+    assert(ChessBoard.board(2)(4).isEmpty)
+  }
+
+  test("Player1 make a wrong move that provoke a Chess of Rook") {
+    Given("Chess App running")
+    ChessApp.main(Array("src/test/resources/invalid-check-move/in-check-invalid-rook.txt", "10"))
+    When("I run the chess game")
+    Then("The player1 made a wrong move")
+    val maybePlayer1Pawn = ChessBoard.board(4)(4)
+    assert(maybePlayer1Pawn.isDefined)
+    assert(maybePlayer1Pawn.get.name.trim == "pawn")
+  }
+
 }
 
