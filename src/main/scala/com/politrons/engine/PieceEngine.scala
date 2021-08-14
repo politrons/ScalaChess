@@ -17,7 +17,7 @@ trait PieceEngine {
   def isCheck(movement: Movement): Try[Boolean]
 
   def inCheck(movement: Movement): Try[Unit] = {
-    val maybePiece = ChessBoard.board(movement.rowTo.value)(movement.columnTo.value)
+    val maybePiece = ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value)
     ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) = None
     val triedUnit = Try {
       movement.player match {
