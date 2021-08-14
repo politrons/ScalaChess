@@ -52,7 +52,26 @@ one by one committing every scenario to have a quick feedback about your program
 * **Integration**: I also use scalatest to run the main class ```ChessApp``` together with some movement files to test the end to end of the application,
     and prove different real game scenarios
 
-## Makefile
+## How to run
+
+There's two ways to build and run ```Scala Chess``` by **Docker** or **Makefile**
+
+### Docker
+
+To being able to build and run this project, it will require you have `````Docker deamon````` installed.
+
+Create the docker image, running in the root folder
+````
+docker build -t chess .
+````
+
+Once we pass all the test and we build the image, we create a container through the images.
+
+````
+docker run chess
+````
+
+### Makefile
 
 To being able to build and run this project, it will require you have `````sbt````` installed.
 

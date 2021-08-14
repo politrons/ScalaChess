@@ -20,14 +20,14 @@ object CheckRules {
       val currentRow = movement.rowTo.value
       var currentColumn = movement.columnTo.value
       //Row ++  Column --
-      val definedRowPlusColumnLess = searchKingInDiagonal(movement, currentRow + 1, 7, 1, column => column - 1)
+      val definedRowPlusColumnLess = findKingInDiagonal(movement, currentRow + 1, 7, 1, column => column - 1)
       //Row -- Column --
-      val definedRowLessColumnLess = searchKingInDiagonal(movement, currentRow - 1, 0, -1, column => column - 1)
+      val definedRowLessColumnLess = findKingInDiagonal(movement, currentRow - 1, 0, -1, column => column - 1)
       //Row ++ Column ++
-      val definedRowPlusColumnPlus = searchKingInDiagonal(movement, currentRow + 1, 7, 1, column => column + 1)
+      val definedRowPlusColumnPlus = findKingInDiagonal(movement, currentRow + 1, 7, 1, column => column + 1)
       //Row -- Column ++
       currentColumn = movement.columnTo.value
-      val definedRowLessColumnPlus = searchKingInDiagonal(movement, currentRow - 1, 0, -1, column => column + 1)
+      val definedRowLessColumnPlus = findKingInDiagonal(movement, currentRow - 1, 0, -1, column => column + 1)
 
       definedRowPlusColumnLess.isDefined ||
         definedRowLessColumnLess.isDefined ||
@@ -109,7 +109,7 @@ object CheckRules {
     }
   }
 
-  private def searchKingInDiagonal(movement: Movement,
+  private def findKingInDiagonal(movement: Movement,
                                    from: Int,
                                    to: Int,
                                    incDec: Int,
