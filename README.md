@@ -54,6 +54,8 @@ one by one committing every scenario to have a quick feedback about your program
 
 ## How to run
 
+![My image](img/docker.png)
+
 There's two ways to build and run ```Scala Chess``` by **Docker** or **Makefile**
 
 ### Docker
