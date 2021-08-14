@@ -19,7 +19,7 @@ case class QueenEngine() extends PieceEngine {
       _ <- if (isValidNextMove(movement)) Success() else Failure(IllegalMovementException(s"Error validating $movement"))
       _ <- if (isValidMovementRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Queen $movement"))
       _ <- if (isValidPathRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Queen path $movement"))
-      _ <- inCheck(movement)
+      _ <- inCheckRule(movement)
     } yield ()
   }
 
@@ -41,7 +41,7 @@ case class QueenEngine() extends PieceEngine {
     }
   }
 
-  override def isCheck(movement: Movement): Try[Boolean] = {
+  override def isCheckRule(movement: Movement): Try[Boolean] = {
     Try(diagonalCheck(movement, 7, 0).get || horizontalVerticalCheck(movement, 7, 0, 7, 0).get)
   }
 }

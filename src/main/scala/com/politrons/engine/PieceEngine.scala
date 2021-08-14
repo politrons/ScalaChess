@@ -14,9 +14,9 @@ trait PieceEngine {
 
   def isValid(movement: ChessDomain.Movement): Try[Unit]
 
-  def isCheck(movement: Movement): Try[Boolean]
+  def isCheckRule(movement: Movement): Try[Boolean]
 
-  def inCheck(movement: Movement): Try[Unit] = {
+  def inCheckRule(movement: Movement): Try[Unit] = {
     val maybePieceFrom = ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value)
     val maybePieceTo = ChessBoard.board(movement.rowTo.value)(movement.columnTo.value)
     ChessBoard.board(movement.rowFrom.value)(movement.columnFrom.value) = None

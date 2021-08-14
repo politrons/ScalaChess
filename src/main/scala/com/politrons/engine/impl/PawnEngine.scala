@@ -19,7 +19,7 @@ case class PawnEngine() extends PieceEngine {
       _ <- if (isValidNextMove(movement)) Success() else Failure(IllegalMovementException(s"Error validating $movement"))
       _ <- if (isValidMovementRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Pawn $movement"))
       _ <- if (isValidPathRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Pawn path $movement"))
-      _ <- inCheck(movement)
+      _ <- inCheckRule(movement)
     } yield ()
   }
 
@@ -39,7 +39,7 @@ case class PawnEngine() extends PieceEngine {
     oneForwardAndDiagonalPath(horizontal, movement)
   }
 
-  override def isCheck(movement: Movement): Try[Boolean] = Success(false)
+  override def isCheckRule(movement: Movement): Try[Boolean] = Success(false)
 
   private def diagonalMoveWithOpponentPieceInDestination(movement: Movement,
                                                          horizontal: Int,

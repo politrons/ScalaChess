@@ -18,7 +18,7 @@ case class BishopEngine() extends PieceEngine {
       _ <- if (isValidNextMove(movement)) Success() else Failure(IllegalMovementException(s"Error validating $movement"))
       _ <- if (isValidMovementRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Bishop $movement"))
       _ <- if (isValidPathRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Bishop path $movement"))
-      _ <- inCheck(movement)
+      _ <- inCheckRule(movement)
     } yield ()
   }
 
@@ -42,7 +42,7 @@ case class BishopEngine() extends PieceEngine {
    * Rule Check: Go in all possible diagonals, and just obtain the first defined piece in the path.
    * If that piece is a King is consider a Check.
    */
-  override def isCheck(movement: Movement): Try[Boolean] = {
+  override def isCheckRule(movement: Movement): Try[Boolean] = {
     diagonalCheck(movement,7,0)
   }
 

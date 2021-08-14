@@ -38,12 +38,20 @@ class ChessAppSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterEac
     assert(maybeRookPiece.isEmpty)
   }
 
-  test("Check mate with scholar") {
+  test("Check mate with scholar player1") {
     Given("Chess App running")
-    ChessApp.main(Array("src/test/resources/scholar-checkmate.txt", "10"))
+    ChessApp.main(Array("src/test/resources/scholar-checkmate-player1.txt", "10"))
     When("I run the chess game")
     Then("The game end with a checkmate")
     assert(ChessBoard.inCheckMessage == "Player 2 in Check")
+  }
+
+  test("Check mate with scholar player2") {
+    Given("Chess App running")
+    ChessApp.main(Array("src/test/resources/scholar-checkmate-player2.txt", "10"))
+    When("I run the chess game")
+    Then("The game end with a checkmate")
+    assert(ChessBoard.inCheckMessage == "Player 1 in Check")
   }
 
   test("Player1 eat pawn of player2") {

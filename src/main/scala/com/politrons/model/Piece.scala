@@ -10,6 +10,6 @@ case class Piece(name: String,
                  engine: PieceEngine) {
   def isValid(movement: Movement): Try[Unit] = engine.isValid(movement)
 
-  def isCheck(movement: Movement): Try[Boolean] = engine.isCheck(movement)
+  def isCheck(movement: Movement): Try[Boolean] = engine.isCheckRule(movement)
 
 }

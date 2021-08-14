@@ -18,7 +18,7 @@ case class KingEngine() extends PieceEngine {
       _ <- if (isValidNextMove(movement)) Success() else Failure(IllegalMovementException(s"Error validating $movement"))
       _ <- if (isValidMovementRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating King $movement"))
       _ <- if (isValidPathRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating King path $movement"))
-      _ <- inCheck(movement)
+      _ <- inCheckRule(movement)
     } yield ()
   }
 
@@ -42,7 +42,7 @@ case class KingEngine() extends PieceEngine {
     }
   }
 
-  override def isCheck(movement: Movement): Try[Boolean] = {
+  override def isCheckRule(movement: Movement): Try[Boolean] = {
     val tryDiagonalCheck = diagonalCheck(movement, movement.rowTo.value + 1, movement.rowTo.value - 1)
     val tryHorizontalVerticalCheck = horizontalVerticalCheck(movement, movement.rowTo.value + 1, movement.rowTo.value - 1, movement.columnTo.value + 1, movement.columnTo.value - 1)
     Try(tryDiagonalCheck.get || tryHorizontalVerticalCheck.get)

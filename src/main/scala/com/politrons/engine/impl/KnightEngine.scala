@@ -19,7 +19,7 @@ case class KnightEngine() extends PieceEngine {
       _ <- if (isValidNextMove(movement)) Success() else Failure(IllegalMovementException(s"Error validating $movement"))
       _ <- if (isValidMovementRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Knight $movement"))
       _ <- if (isValidPathRule(movement)) Success() else Failure(IllegalMovementException(s"Error validating Knight path $movement"))
-      _ <- inCheck(movement)
+      _ <- inCheckRule(movement)
     } yield ()
   }
 
@@ -40,7 +40,7 @@ case class KnightEngine() extends PieceEngine {
   /**
    * Check Rule: check if the King is in all possible 8 movements of the current Knight position.
    */
-  override def isCheck(movement: Movement): Try[Boolean] = {
+  override def isCheckRule(movement: Movement): Try[Boolean] = {
     knightCheck(movement)
   }
 

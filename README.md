@@ -1,18 +1,34 @@
 # ScalaChess
 
-Application to run Chess games through movements loaded from external [files](src/main/resources/) resources.
+Chess game engine to run Chess games through movements loaded from external [files](src/main/resources/) resources.
 
-Each ```Movement``` use a ```Piece``` which contains an ``Engine`` with the rules of how it 
+Each ```Movement``` use a ```Piece``` which contains an ``Engine`` with the rules of how it
 can move through the board, and also if each move end up in a Check or Checkmate.
-
 # ![My image](img/chess.png)
 
+First we check if the movement of the piece is correct
+```
+isValidMovementRule
+```
+Then we check if the path from where we move it's clear
+```
+isValidPathRule
+```
+Finally we check if at the end of the movement we put the opponent in check.
+```
+isCheckRule
+```
+
+In each movement we always check if we're in check, and we do we cannot end up our movement keeping in that way.
+```
+inCheckRule
+```
 
 After each movement we render in console the board in ASCII
 
 ````
 
-闩ㄩセㄖ ⼕卄🝗丂丂
+Ⓢⓒⓐⓛⓐ Ⓒⓗⓔⓢⓢ̳ 
 
 PLAYER 1: 8                                                 PLAYER 2: 8
 ########################################################################
@@ -46,6 +62,8 @@ PLAYER 1: 8                                                 PLAYER 2: 8
 
 **To go fast you have to go well** this quote of Robert C. Martin express perfectly what TDD and BDD is about. You should think first in all corner cases of your program, and then implement
 one by one committing every scenario to have a quick feedback about your program.
+
+In this game I invested around 70% of the time implementing the test framework, the type of testing implemented are described below.
 
 * **Unit**: I used [scalatest](https://www.scalatest.org) together with some local mock board to Mock the board and behavior 
     for all corer case of the engines. 
