@@ -43,7 +43,7 @@ class ChessAppSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterEac
     ChessApp.main(Array("src/test/resources/scholar-checkmate-player1.txt", "10"))
     When("I run the chess game")
     Then("The game end with a checkmate")
-    assert(ChessBoard.inCheckMessage == "Player 2 in Check")
+    assert(ChessBoard.player2Check == "In Check")
   }
 
   test("Check mate with scholar player2") {
@@ -51,7 +51,7 @@ class ChessAppSpec extends AnyFunSuite with GivenWhenThen with BeforeAndAfterEac
     ChessApp.main(Array("src/test/resources/scholar-checkmate-player2.txt", "10"))
     When("I run the chess game")
     Then("The game end with a checkmate")
-    assert(ChessBoard.inCheckMessage == "Player 1 in Check")
+    assert(ChessBoard.player1Check == "In Check")
   }
 
   test("Player1 eat pawn of player2") {

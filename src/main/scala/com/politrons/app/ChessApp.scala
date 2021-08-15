@@ -20,7 +20,7 @@ object ChessApp {
     println(s"Path of Chess game movements: $fileName")
     chessClock = args(1).toInt
     println(s"Chess clock for the game: $chessClock ms")
-    ChessBoard.printBoard()
+    ChessBoard.printBoard(false)
     path = Paths.get(fileName).toString
     inputFile = new UserInputFile(path)
     runPlayerMovement(Player1(), 1)

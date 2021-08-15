@@ -17,22 +17,23 @@ object ChessBoard {
   private var player1Movements = 0
   private var player2Movements = 0
 
-  var inCheckMessage = "                 "
+  var player1Check = ""
+  var player2Check = ""
 
   /**
    * Prints current board state to the console in the ASCII mnemonic format
    */
   def printGameInfo(player: Player, isCheck: Boolean): Unit = {
     increasePlayerMovement(player)
-    inCheckMessage = createInCheckMessage(player, isCheck)
-    printBoard()
+    createInCheckMessage(player, isCheck)
+    printBoard(isCheck)
   }
 
-  def printBoard(): Unit = {
+  def printBoard(isCheck: Boolean): Unit = {
     val filesRow = """     A       B        C        D        E        F        G        H       """
     val separator = """+-------+--------+--------+--------+--------+--------+--------+--------+  """
     println(logo)
-    println(s"PLAYER 1: $player1Movements                  ${inCheckMessage}               PLAYER 2: $player2Movements")
+    println(s"PLAYER 1: $player1Movements $player1Check                   ${if (isCheck) "Check" else ""}               PLAYER 2: $player2Movements $player2Check")
     println("########################################################################")
     println(filesRow)
     println(separator)
@@ -108,11 +109,13 @@ object ChessBoard {
   /**
    * Function to calc and create the [in check] message.
    */
-  private def createInCheckMessage(player: Player, isCheck: Boolean) = {
+  private def createInCheckMessage(player: Player, isCheck: Boolean): Unit = {
     player match {
-      case Player1() if isCheck => "Player 2 in Check"
-      case Player2() if isCheck => "Player 1 in Check"
-      case _ => "                 "
+      case Player1() if isCheck => player2Check = "In Check"
+      case Player2() if isCheck => player1Check = "In Check"
+      case _ =>
+        player1Check = ""
+        player2Check = ""
     }
   }
 

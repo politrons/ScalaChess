@@ -89,10 +89,26 @@ object CheckRules {
    */
   def oneDiagonalCheck(movement: Movement): Try[Boolean] = {
     Try {
-      val maybePieceUpRight = ChessBoard.board(movement.rowTo.value - 1)(movement.columnTo.value + 1)
-      val maybePieceUpLeft = ChessBoard.board(movement.rowTo.value - 1)(movement.columnTo.value - 1)
-      val maybePieceDownRight = ChessBoard.board(movement.rowTo.value + 1)(movement.columnTo.value + 1)
-      val maybePieceDownLeft = ChessBoard.board(movement.rowTo.value + 1)(movement.columnTo.value - 1)
+      val maybePieceUpRight = if (movement.rowTo.value - 1 >= 0 && movement.columnTo.value + 1 <= 7) {
+        ChessBoard.board(movement.rowTo.value - 1)(movement.columnTo.value + 1)
+      } else {
+        None
+      }
+      val maybePieceUpLeft = if (movement.rowTo.value - 1 >= 0 && movement.columnTo.value - 1 >= 0) {
+        ChessBoard.board(movement.rowTo.value - 1)(movement.columnTo.value - 1)
+      } else {
+        None
+      }
+      val maybePieceDownRight = if (movement.rowTo.value + 1 <=7 && movement.columnTo.value + 1 <= 7) {
+        ChessBoard.board(movement.rowTo.value + 1)(movement.columnTo.value + 1)
+      } else {
+        None
+      }
+      val maybePieceDownLeft = if (movement.rowTo.value + 1 <=7 && movement.columnTo.value - 1 >= 0) {
+        ChessBoard.board(movement.rowTo.value + 1)(movement.columnTo.value - 1)
+      } else {
+        None
+      }
 
       isOpponentKingPiece(movement, maybePieceUpRight) ||
         isOpponentKingPiece(movement, maybePieceUpLeft) ||
@@ -108,8 +124,8 @@ object CheckRules {
   }
 
   private def findKingInKnightMovement(row: Int,
-                               column: Int,
-                               player: Player): Boolean = {
+                                       column: Int,
+                                       player: Player): Boolean = {
     if ((row >= 0) && column >= 0) {
       val maybePiece = ChessBoard.board(row)(column)
       maybePiece.isDefined &&
@@ -139,10 +155,10 @@ object CheckRules {
 
 
   private def findKingInDiagonal(movement: Movement,
-                         from: Int,
-                         to: Int,
-                         incDec: Int,
-                         incDecColumnFunc: Int => Int): Option[Piece] = {
+                                 from: Int,
+                                 to: Int,
+                                 incDec: Int,
+                                 incDecColumnFunc: Int => Int): Option[Piece] = {
     var currentColumn = movement.columnTo.value
     (from to to by incDec)
       .flatMap(row => {
