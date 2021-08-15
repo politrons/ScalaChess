@@ -4,7 +4,8 @@ import com.politrons.engine.PieceEngine
 import com.politrons.exceptions.IllegalMovementException
 import com.politrons.model.ChessDomain.Movement
 import com.politrons.model.Piece
-import com.politrons.rules.PathRules.oneForwardAndDiagonalPath
+import com.politrons.rules.CheckRules.oneDiagonalCheck
+import com.politrons.rules.PathRules.{destinationMovementNoPieceOfMine, incDecColumn, oneForwardAndDiagonalPath}
 import com.politrons.view.ChessBoard
 
 import scala.util.{Failure, Success, Try}
@@ -39,7 +40,9 @@ case class PawnEngine() extends PieceEngine {
     oneForwardAndDiagonalPath(horizontal, movement)
   }
 
-  override def isCheckRule(movement: Movement): Try[Boolean] = Success(false)
+  override def isCheckRule(movement: Movement): Try[Boolean] = {
+    oneDiagonalCheck(movement)
+  }
 
   private def diagonalMoveWithOpponentPieceInDestination(movement: Movement,
                                                          horizontal: Int,

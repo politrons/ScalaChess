@@ -1,6 +1,6 @@
 package com.politrons.engine
 
-import com.politrons.engine.impl.PawnEngine
+import com.politrons.engine.impl.{BishopEngine, PawnEngine}
 import com.politrons.model.ChessDomain._
 import com.politrons.model.Piece
 import com.politrons.utils.BoardMock
@@ -67,5 +67,59 @@ class ChessEnginePawnSpec extends AnyFunSuite with GivenWhenThen with BeforeAndA
     Then("The movement is wrong")
     assert(result.isFailure)
   }
+
+  /**
+   * CHECK RULES
+   * ------------
+   */
+  test("Pawn check rule, pawn 1,4") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("pawn",Player2(), PawnEngine())
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(4), RowTo(1))
+    ChessBoard.board(1)(4) = Some(piece)
+    When("I invoke isCheck for Pawn")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is not check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
+  }
+
+  test("Pawn check rule, pawn 1,2") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("pawn",Player2(), PawnEngine())
+    val movement = Movement(Player2(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(2), RowTo(1))
+    ChessBoard.board(1)(2) = Some(piece)
+    When("I invoke isCheck for Pawn")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is not check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
+  }
+
+  test("Pawn check rule, pawn 6,4") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("Pawn",Player1(), PawnEngine())
+    val movement = Movement(Player1(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(4), RowTo(6))
+    ChessBoard.board(6)(4) = Some(piece)
+    When("I invoke isCheck for Pawn")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is not check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
+  }
+
+  test("Pawn check rule, pawn 6,2") {
+    Given("Chess engine instance in piece and clear path to king")
+    val piece = Piece("Pawn",Player1(), PawnEngine())
+    val movement = Movement(Player1(), 1, ColumnFrom(4), RowFrom(4), ColumnTo(2), RowTo(6))
+    ChessBoard.board(6)(2) = Some(piece)
+    When("I invoke isCheck for Pawn")
+    val isCheck = piece.isCheck(movement)
+    Then("The movement is not check")
+    assert(isCheck.isSuccess)
+    assert(isCheck.get)
+  }
+
+
 }
 

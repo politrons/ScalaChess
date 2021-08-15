@@ -67,7 +67,7 @@ object CheckRules {
   }
 
   /**
-   * Check Rule: check if the King is in all possible 8 movements of the current Knight position.
+   * Rule Check: check if the King is in all possible 8 movements of the current Knight position.
    */
   def knightCheck(movement: Movement): Try[Boolean] = {
     Try {
@@ -82,6 +82,29 @@ object CheckRules {
         findKingInKnightMovement(row - 2, column - 1, movement.player) ||
         findKingInKnightMovement(row - 2, column + 1, movement.player)
     }
+  }
+
+  /**
+   * Rule Check: check the 4 diagonal movement of the Pawn piece to see if there's any King in any of those spots.
+   */
+  def oneDiagonalCheck(movement: Movement): Try[Boolean] = {
+    Try {
+      val maybePieceUpRight = ChessBoard.board(movement.rowTo.value - 1)(movement.columnTo.value + 1)
+      val maybePieceUpLeft = ChessBoard.board(movement.rowTo.value - 1)(movement.columnTo.value - 1)
+      val maybePieceDownRight = ChessBoard.board(movement.rowTo.value + 1)(movement.columnTo.value + 1)
+      val maybePieceDownLeft = ChessBoard.board(movement.rowTo.value + 1)(movement.columnTo.value - 1)
+
+      isOpponentKingPiece(movement, maybePieceUpRight) ||
+        isOpponentKingPiece(movement, maybePieceUpLeft) ||
+        isOpponentKingPiece(movement, maybePieceDownRight) ||
+        isOpponentKingPiece(movement, maybePieceDownLeft)
+    }
+  }
+
+  private def isOpponentKingPiece(movement: Movement, maybePieceUpRight: Option[Piece]) = {
+    maybePieceUpRight.isDefined &&
+      maybePieceUpRight.get.player != movement.player &&
+      maybePieceUpRight.get.name.trim.toLowerCase() == "king"
   }
 
   private def findKingInKnightMovement(row: Int,
